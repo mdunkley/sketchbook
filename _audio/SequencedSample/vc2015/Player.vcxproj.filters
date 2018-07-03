@@ -1,0 +1,160 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Blocks">
+      <UniqueIdentifier>{7AEB5788-F0FE-42B0-BE21-E0E95D8B5D81}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\ImGui">
+      <UniqueIdentifier>{3674E5C0-AF58-4B7A-993E-61A26D927040}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\ImGui\include">
+      <UniqueIdentifier>{DDA130ED-51CF-48B7-8FC1-D8E350A81C11}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\ImGui\lib">
+      <UniqueIdentifier>{A8906282-EC0E-4806-9144-A7C54F2146B5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\ImGui\lib\imgui">
+      <UniqueIdentifier>{26B4BF7D-F6F1-4F8B-9064-E4F679C3D10F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Blocks\ImGui\src">
+      <UniqueIdentifier>{3B6E1EEE-6352-4811-B48F-CA8A746E2FE6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{828c7968-e21e-427a-a374-5fd7786f8243}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\PlayerApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\PlayerApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClInclude Include="..\include\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Cinder\blocks\Cinder-ImGui\include\CinderImGui.h">
+      <Filter>Blocks\ImGui\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Cinder\blocks\Cinder-ImGui\lib\imgui\imconfig.h">
+      <Filter>Blocks\ImGui\lib\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui.h">
+      <Filter>Blocks\ImGui\lib\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui_internal.h">
+      <Filter>Blocks\ImGui\lib\imgui</Filter>
+    </ClInclude>
+    <ClCompile Include="..\..\..\..\Cinder\blocks\Cinder-ImGui\src\CinderImGui.cpp">
+      <Filter>Blocks\ImGui\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui.cpp">
+      <Filter>Blocks\ImGui\lib\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui_draw.cpp">
+      <Filter>Blocks\ImGui\lib\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui_demo.cpp">
+      <Filter>Blocks\ImGui\lib\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\AudioManager.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\DistortionNode.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\GranularPlayer.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Instrument.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\PolySamplePlayer.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\PolyWavetablePlayer.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Recorder.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\SampleVoice.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Sequencer.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\WavetableVoice.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Pattern.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\SampleBank.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\SequencedSample.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\AudioManager.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\DistortionNode.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\GranularPlayer.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Instrument.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\PolySamplePlayer.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\PolyWavetablePlayer.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Recorder.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\SampleVoice.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Sequencer.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\WavetableVoice.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Pattern.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\SampleBank.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\SequencedSample.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

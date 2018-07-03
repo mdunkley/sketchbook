@@ -1,0 +1,139 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Audio\include">
+      <UniqueIdentifier>{60b36acd-20ac-47c3-8792-fda21ba9212c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio\src">
+      <UniqueIdentifier>{bbb6787c-6274-47b4-a4a2-f3e5f0556986}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\fxBuildApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\fxBuildApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\AudioManager.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\GranularPlayer.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Instrument.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\PolySamplePlayer.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\PolyWavetablePlayer.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Recorder.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\SampleVoice.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Sequencer.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\DistortionNode.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\WavetableVoice.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\SampleBank.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Pattern.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\LiveChannel.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\SequencedSample.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\MoogFilterNode.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\AmbienceNode.cpp">
+      <Filter>Audio\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\common\include\AudioManager.hpp">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\DistortionNode.h">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\GranularPlayer.hpp">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Instrument.hpp">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\PolySamplePlayer.hpp">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\PolyWavetablePlayer.hpp">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\SampleVoice.hpp">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Recorder.hpp">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Sequencer.hpp">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\WavetableVoice.hpp">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Resources.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Resources.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\SampleBank.h">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Pattern.h">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\LiveChannel.h">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\SequencedSample.h">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\MoogFilterNode.h">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\AmbienceNode.h">
+      <Filter>Audio\include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

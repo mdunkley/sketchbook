@@ -1,0 +1,52 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2027
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AudioSandbox", "AudioSandbox.vcxproj", "{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug_ANGLE|x64 = Debug_ANGLE|x64
+		Debug_ANGLE|x86 = Debug_ANGLE|x86
+		Debug_Shared|x64 = Debug_Shared|x64
+		Debug_Shared|x86 = Debug_Shared|x86
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release_ANGLE|x64 = Release_ANGLE|x64
+		Release_ANGLE|x86 = Release_ANGLE|x86
+		Release_Shared|x64 = Release_Shared|x64
+		Release_Shared|x86 = Release_Shared|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug_ANGLE|x64.ActiveCfg = Debug|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug_ANGLE|x64.Build.0 = Debug|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug_ANGLE|x86.ActiveCfg = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug_ANGLE|x86.Build.0 = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug_Shared|x64.ActiveCfg = Debug|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug_Shared|x64.Build.0 = Debug|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug_Shared|x86.ActiveCfg = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug_Shared|x86.Build.0 = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug|x64.ActiveCfg = Debug|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug|x64.Build.0 = Debug|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Debug|x86.ActiveCfg = Debug|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release_ANGLE|x64.ActiveCfg = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release_ANGLE|x64.Build.0 = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release_ANGLE|x86.ActiveCfg = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release_ANGLE|x86.Build.0 = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release_Shared|x64.ActiveCfg = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release_Shared|x64.Build.0 = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release_Shared|x86.ActiveCfg = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release_Shared|x86.Build.0 = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release|x64.ActiveCfg = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release|x64.Build.0 = Release|x64
+		{62669E69-21FE-411E-9E9F-6E1EEF82F6E3}.Release|x86.ActiveCfg = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A8DD85F-C010-444C-9BBA-E7033CE47613}
+	EndGlobalSection
+EndGlobal

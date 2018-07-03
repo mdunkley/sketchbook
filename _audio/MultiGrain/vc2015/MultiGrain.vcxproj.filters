@@ -1,0 +1,118 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{d13a1c9f-4968-4293-9cde-27de11822e15}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Audio\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Audio\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{387fc4ed-e04d-47b8-b390-0a2b7ddd6d97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{0df6bba8-7776-4fc1-bb81-f5e88abfd812}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\MultiGrainApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\AudioManager.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\GranularPlayer.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Instrument.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\PolyWavetablePlayer.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Recorder.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\SampleVoice.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\WavetableVoice.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Sequencer.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\MultiGrainApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\PolySamplePlayer.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\Pattern.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\SampleBank.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\common\src\SampleChannel.cpp">
+      <Filter>Audio\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\include\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\AudioManager.hpp">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\GranularPlayer.hpp">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Instrument.hpp">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\PolyWavetablePlayer.hpp">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Recorder.hpp">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\SampleVoice.hpp">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\WavetableVoice.hpp">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\Resources.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Sequencer.hpp">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\PolySamplePlayer.hpp">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\Pattern.h">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\SampleBank.h">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\common\include\SampleChannel.h">
+      <Filter>Audio\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
