@@ -28,7 +28,7 @@ class PlayerApp : public App {
 	  PlayerApp();
 
 	void setup() override;
-	void setupMultichannelDevice();
+	void setupAudioDevice();
 	void setupOSC();
 	void mouseUp(MouseEvent event) override;
 	void mouseDown( MouseEvent event ) override;
@@ -73,25 +73,7 @@ void PlayerApp::setup()
 
 	Rand::randomize();
 
-	setupMultichannelDevice();
-
-	/*
-	audio::DeviceRef indev = audio::Device::findDeviceByName("Microphone (ES-8)");
-	if( indev ) mInputDeviceNode = ctx->createInputDeviceNode(indev, audio::Node::Format().channels(indev->getNumInputChannels()));
-	audio::DeviceRef outdev = audio::Device::findDeviceByName("Speakers (ES-8)");
-	if(outdev){
-		audio::OutputDeviceNodeRef multichannelOutputDeviceNode = ctx->createOutputDeviceNode(outdev, audio::Node::Format().channels(outdev->getNumOutputChannels()));
-		ctx->setOutput(multichannelOutputDeviceNode);
-	}
-
-	indev = audio::Device::findDeviceByName("Line (3- K-MixUSBAudioDriver)");
-	if( indev ) mInputDeviceNode = ctx->createInputDeviceNode(indev, audio::Node::Format().channels(indev->getNumInputChannels()));
-	outdev = audio::Device::findDeviceByName("Speakers (3- K-MixUSBAudioDriver)");
-	if (outdev) {
-		audio::OutputDeviceNodeRef multichannelOutputDeviceNode = ctx->createOutputDeviceNode(outdev, audio::Node::Format().channels(outdev->getNumOutputChannels()));
-		ctx->setOutput(multichannelOutputDeviceNode);
-	}
-	*/
+	setupAudioDevice();
 
 	mRecRouter = ctx->makeNode( new ci::audio::ChannelRouterNode() );
 	mInputMonitor = ctx->makeNode(new ci::audio::MonitorNode());
@@ -103,7 +85,6 @@ void PlayerApp::setup()
 		mInputDeviceNode->enable();
 	}
 
-	setupOSC();
 
 	ci::app::console() << app::getAppPath() << std::endl;
 	fs::path commonAudioPath = fs::canonical(app::getAppPath() / "../../../../../../Media/audio");
@@ -111,8 +92,6 @@ void PlayerApp::setup()
 	mRootBank = make_shared<SampleBank>();
 	mRootBank->loadAssetDirectoryByName("test");
 	ci::audio::BufferRef buffer = mRootBank->getRandomBuffer();
-
-
 
 	mClock = std::make_shared<Sequencer>();
 	mPlayer = ctx->makeNode( new SampleNode(ci::audio::Node::Format().channels(2)) );
@@ -131,43 +110,60 @@ void PlayerApp::setup()
 	std::list<int> scale = { 0,5 };
 	mPlayer->setScale(scale);
 	mPlayer->enable();
-	mPlayer->setVolume(.2);
+	mPlayer->setVolume(1);
 
 	mRecorder->attachTo(mPlayer);
 	mRecorder->record(false);
 
 	mClock->start();
 	ctx->enable();
+
+	setupOSC();
 }
 
-void PlayerApp::setupMultichannelDevice()
+void PlayerApp::setupAudioDevice()
 {
 	// debug print all devices to console
 	console() << audio::Device::printDevicesToString() << endl;
 
-	audio::DeviceRef deviceWithMaxOutputs;
-	audio::DeviceRef deviceWithMaxInputs;
-	for (const auto &dev : audio::Device::getDevices()) {
-		if (!deviceWithMaxOutputs || deviceWithMaxOutputs->getNumOutputChannels() < dev->getNumOutputChannels())
-			deviceWithMaxOutputs = dev;
-		if (!deviceWithMaxInputs || deviceWithMaxInputs->getNumInputChannels() < dev->getNumInputChannels())
-			deviceWithMaxInputs = dev;
+	auto ctx = audio::master();
+	audio::DeviceRef deviceIn;
+	audio::DeviceRef deviceOut;
+
+	audio::DeviceRef es8 = audio::Device::findDeviceByName("Microphone (ES-8)");
+	if (es8) {
+		deviceIn = es8;
+		deviceOut = audio::Device::findDeviceByName("Speakers (ES-8)");
 	}
 
-	
-	console() << endl << "max output channels: " << deviceWithMaxOutputs->getNumOutputChannels() << endl;
-	getWindow()->setTitle(deviceWithMaxOutputs->getName());
+	audio::DeviceRef kmix = audio::Device::findDeviceByName("Line (3- K-MixUSBAudioDriver)");
+	if (kmix) {
+		deviceIn = kmix;
+		deviceOut = audio::Device::findDeviceByName("Speakers (3- K-MixUSBAudioDriver)");
+	}
 
-	auto ctx = audio::master();
-	audio::OutputDeviceNodeRef multichannelOutputDeviceNode = ctx->createOutputDeviceNode(deviceWithMaxOutputs, audio::Node::Format().channels(deviceWithMaxOutputs->getNumOutputChannels()));
+	audio::DeviceRef mill_device = audio::Device::findDeviceByName("Speakers (High Definition Audio Device)");
+	if (mill_device) {
+		deviceIn = nullptr;
+		deviceOut = mill_device;
+	}
+
+	if (!mill_device && !kmix && !es8) {
+		for (const auto &dev : audio::Device::getDevices()) {
+			if (!deviceOut || deviceOut->getNumOutputChannels() < dev->getNumOutputChannels()) deviceOut = dev;
+			if (!deviceIn || deviceIn->getNumInputChannels() < dev->getNumInputChannels()) deviceIn = dev;
+		}
+	}
+
+	if (deviceIn && deviceIn->getNumInputChannels()>0)	mInputDeviceNode = ctx->createInputDeviceNode(deviceIn, audio::Node::Format().channels(deviceIn->getNumInputChannels()));
+	auto out = ctx->createOutputDeviceNode(deviceOut, audio::Node::Format().channels(deviceOut->getNumOutputChannels()));
+	ctx->setOutput(out);
 	
-	if( deviceWithMaxInputs->getNumInputChannels()>0 )	mInputDeviceNode = ctx->createInputDeviceNode(deviceWithMaxInputs, audio::Node::Format().channels(deviceWithMaxInputs->getNumInputChannels()));
-	ctx->setOutput(multichannelOutputDeviceNode);
+	getWindow()->setTitle(deviceOut->getName());
 
 }
 
 void PlayerApp::setupOSC() {
-
 
 	mReceiver.setListener("/4/xy",
 		[&](const osc::Message &msg) {
@@ -181,18 +177,12 @@ void PlayerApp::setupOSC() {
 	});
 
 
-	try {
-		// Bind the receiver to the endpoint. This function may throw.
-		mReceiver.bind();
-	}
+	try { mReceiver.bind();	}
 	catch (const osc::Exception &ex) {
 		CI_LOG_E("Error binding: " << ex.what() << " val: " << ex.value());
 		quit();
 	}
 
-	// UDP opens the socket and "listens" accepting any message from any endpoint. The listen
-	// function takes an error handler for the underlying socket. Any errors that would
-	// call this function are because of problems with the socket or with the remote message.
 	mReceiver.listen(
 		[](asio::error_code error, protocol::endpoint endpoint) -> bool {
 		if (error) {
