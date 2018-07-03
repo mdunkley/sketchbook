@@ -10,8 +10,8 @@
 
 Recorder::Recorder(){
 
-	mInput = audio::master()->createInputDeviceNode();
-	mNodes.push_back(mInput);
+	//mInput = audio::master()->createInputDeviceNode();
+	//mNodes.push_back(mInput);
 
 	mRecordingGainNode = ci::audio::master()->makeNode(new audio::GainNode());
 	mRecordingGainNode->setValue(1.0f);
@@ -21,7 +21,7 @@ Recorder::Recorder(){
 	mBufferRecorder->setNumSeconds(60.0);
 	mNodes.push_back(mBufferRecorder);
 
-	if (!mInput) mInput >> mRecordingGainNode;
+	//if (!mInput) mInput >> mRecordingGainNode;
 	mRecordingGainNode >> mBufferRecorder;
 
 	disable();

@@ -96,15 +96,18 @@ void PlayerApp::setup()
 	mRecRouter = ctx->makeNode( new ci::audio::ChannelRouterNode() );
 	mInputMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 	mChannelRouter = ctx->makeNode(new ci::audio::ChannelRouterNode());
-	ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
-	mInputDeviceNode >> mInputMonitor;
-	mInputDeviceNode->enable();
+
+	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
+		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
+		mInputDeviceNode >> mInputMonitor;
+		mInputDeviceNode->enable();
+	}
 
 	setupOSC();
 
 	ci::app::console() << app::getAppPath() << std::endl;
 	fs::path commonAudioPath = fs::canonical(app::getAppPath() / "../../../../../../Media/audio");
-	app::addAssetDirectory( commonAudioPath );
+	if( fs::exists( commonAudioPath ) ) app::addAssetDirectory( commonAudioPath );
 	mRootBank = make_shared<SampleBank>();
 	mRootBank->loadAssetDirectoryByName("test");
 	ci::audio::BufferRef buffer = mRootBank->getRandomBuffer();
@@ -157,7 +160,8 @@ void PlayerApp::setupMultichannelDevice()
 
 	auto ctx = audio::master();
 	audio::OutputDeviceNodeRef multichannelOutputDeviceNode = ctx->createOutputDeviceNode(deviceWithMaxOutputs, audio::Node::Format().channels(deviceWithMaxOutputs->getNumOutputChannels()));
-	mInputDeviceNode = ctx->createInputDeviceNode(deviceWithMaxInputs, audio::Node::Format().channels(deviceWithMaxInputs->getNumInputChannels()));
+	
+	if( deviceWithMaxInputs->getNumInputChannels()>0 )	mInputDeviceNode = ctx->createInputDeviceNode(deviceWithMaxInputs, audio::Node::Format().channels(deviceWithMaxInputs->getNumInputChannels()));
 	ctx->setOutput(multichannelOutputDeviceNode);
 
 }
@@ -302,7 +306,10 @@ void PlayerApp::draw()
 	gl::clear( Color( 0, 0, 0 ) );
 	
 	// Draw the Scope's recorded Buffer in the upper right.
-	if (mInputMonitor && mInputMonitor->getNumConnectedInputs()) {
+	if (mInputDeviceNode && 
+		mInputDeviceNode->getNumChannels() > 0 && 
+		mInputMonitor && 
+		mInputMonitor->getNumConnectedInputs()) {
 		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 510);
 		drawAudioBuffer(mInputMonitor->getBuffer(), scopeRect, true);
 	}
