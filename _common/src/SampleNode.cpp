@@ -166,7 +166,9 @@ void SampleNode::initializeSample(SampleGrain* sample)
 	float transRatio = mNoteLookup[ interval+128 ];
 
 	if (mPositionValues != nullptr) 
-		sample->position = size_t(abs(wrap(mPositionValues[mProcessReadCount] * bufferLength, 0, bufferLength) + mPositionJitter * Rand::randFloat(-1, 1)*sampleRate));
+		sample->position = size_t(abs(
+			wrap(mPositionValues[mProcessReadCount] * bufferLength, 0, bufferLength) + 
+			mPositionJitter * Rand::randFloat(-1, 1)*sampleRate));
 	else
 		sample->position = size_t(abs(mPosition.getValue()*bufferLength + mPositionJitter * Rand::randFloat(-1, 1)*sampleRate));
 

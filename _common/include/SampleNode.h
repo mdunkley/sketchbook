@@ -144,7 +144,7 @@ private:
 	bool mGate = false;
 
 	ci::audio::Param mPosition;
-	const float *mPositionValues;
+	const float *mPositionValues = nullptr;
 
 	float mRamp = .002f;
 
