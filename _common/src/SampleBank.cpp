@@ -5,7 +5,6 @@
 #include <fstream>
 #include <stdio.h>
 
-
 SampleBank::SampleBank()
 {
 }

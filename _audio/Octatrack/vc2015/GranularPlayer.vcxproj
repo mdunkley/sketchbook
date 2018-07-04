@@ -100,7 +100,6 @@
     <ResourceCompile Include="Resources.rc" />
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup />
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui.cpp" />
     <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui_demo.cpp" />
@@ -122,6 +121,7 @@
     <ClCompile Include="..\..\..\_common\src\PolySamplePlayer.cpp" />
     <ClCompile Include="..\..\..\_common\src\PolyWavetablePlayer.cpp" />
     <ClCompile Include="..\..\..\_common\src\Recorder.cpp" />
+    <ClCompile Include="..\..\..\_common\src\AverageNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\SampleBank.cpp" />
     <ClCompile Include="..\..\..\_common\src\SampleNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\SampleVoice.cpp" />
@@ -151,6 +151,7 @@
     <ClInclude Include="..\..\..\_common\include\PolySamplePlayer.hpp" />
     <ClInclude Include="..\..\..\_common\include\PolyWavetablePlayer.hpp" />
     <ClInclude Include="..\..\..\_common\include\Recorder.hpp" />
+    <ClInclude Include="..\..\..\_common\include\AverageNode.h" />
     <ClInclude Include="..\..\..\_common\include\SampleBank.h" />
     <ClInclude Include="..\..\..\_common\include\SampleNode.h" />
     <ClInclude Include="..\..\..\_common\include\SampleVoice.hpp" />

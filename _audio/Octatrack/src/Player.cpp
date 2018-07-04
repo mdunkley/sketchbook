@@ -14,6 +14,7 @@
 #include "cinder/Log.h"
 #include "AudioDrawUtils.h"
 #include "cinder/audio/ChannelRouterNode.h"
+#include "AverageNode.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -51,6 +52,8 @@ class PlayerApp : public App {
 	ci::audio::MonitorNodeRef	mInputMonitor;
 	ci::audio::ChannelRouterNodeRef mChannelRouter;
 	ci::audio::ChannelRouterNodeRef mRecRouter;
+	AverageNodeRef mAverageNode;
+	ci::audio::MonitorNodeRef mAverageMonitor;
 
 	SequencerRef mClock;
 
@@ -77,7 +80,9 @@ void PlayerApp::setup()
 
 	mRecRouter = ctx->makeNode( new ci::audio::ChannelRouterNode() );
 	mInputMonitor = ctx->makeNode(new ci::audio::MonitorNode());
+	mAverageMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 	mChannelRouter = ctx->makeNode(new ci::audio::ChannelRouterNode());
+	mAverageNode = ctx->makeNode(new AverageNode());
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
@@ -111,6 +116,9 @@ void PlayerApp::setup()
 	mPlayer->setScale(scale);
 	mPlayer->enable();
 	mPlayer->setVolume(1);
+
+	mPlayer >> mAverageNode >> mAverageMonitor;
+	mAverageMonitor->enable();
 
 	mRecorder->attachTo(mPlayer);
 	mRecorder->record(false);
@@ -199,7 +207,6 @@ void PlayerApp::setupOSC() {
 void PlayerApp::mouseUp(MouseEvent event)
 {
 	mPlayer->gate(false);
-	//mPlayer->getPositionParam()->setProcessor(mLfo);
 }
 
 void PlayerApp::mouseDown( MouseEvent event )
@@ -295,6 +302,16 @@ void PlayerApp::draw()
 {
 	gl::clear( Color( 0, 0, 0 ) );
 	
+	if (mAverageNode &&
+		mAverageNode->getNumChannels() > 0 &&
+		mAverageMonitor &&
+		mAverageMonitor->getNumConnectedInputs()) {
+		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 100);
+		drawAudioBuffer(mAverageMonitor->getBuffer(), scopeRect, true);
+		//ci::app::console() << mAverageMonitor->getVolume() << std::endl;
+	}
+	
+	/*
 	// Draw the Scope's recorded Buffer in the upper right.
 	if (mInputDeviceNode && 
 		mInputDeviceNode->getNumChannels() > 0 && 
@@ -303,6 +320,7 @@ void PlayerApp::draw()
 		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 510);
 		drawAudioBuffer(mInputMonitor->getBuffer(), scopeRect, true);
 	}
+	*/
 	
 
 

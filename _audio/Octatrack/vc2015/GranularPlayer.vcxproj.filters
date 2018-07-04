@@ -119,6 +119,9 @@
     <ClCompile Include="..\..\..\_common\src\WavetableVoice.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\_common\src\AverageNode.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -188,6 +191,9 @@
       <Filter>Audio</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\_common\include\WavetableVoice.hpp">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_common\include\AverageNode.h">
       <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>
