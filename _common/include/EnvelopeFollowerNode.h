@@ -6,15 +6,15 @@
 
 using namespace cinder::audio;
 
-typedef std::shared_ptr<class AverageNode>	AverageNodeRef;
+typedef std::shared_ptr<class EnvelopeFollowerNode>	EnvelopeFollowerNodeRef;
 
-class AverageNode : public ci::audio::Node
+class EnvelopeFollowerNode : public ci::audio::Node
 {
 
 public:
 
-	AverageNode(const Format &format = Format());
-	~AverageNode();
+	EnvelopeFollowerNode(const Format &format = Format());
+	~EnvelopeFollowerNode();
 
 	void setMultiplier(float mult = 1.0f) { mMultiplier = mult; }
 	float getMultiplier() const { return mMultiplier; }

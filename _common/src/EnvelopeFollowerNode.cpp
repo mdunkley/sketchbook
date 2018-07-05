@@ -1,5 +1,5 @@
 #include <cmath>
-#include "AverageNode.h"
+#include "EnvelopeFollowerNode.h"
 #include "cinder/CinderMath.h"
 #include "cinder/Log.h"
 #include "cinder/Rand.h"
@@ -8,7 +8,7 @@
 
 using namespace cinder::log;
 
-AverageNode::AverageNode(const Format & format) :
+EnvelopeFollowerNode::EnvelopeFollowerNode(const Format & format) :
 	Node(format)
 {
 	mAccumBuffer = std::make_shared<BufferDynamic>(mMaxAverage, getNumChannels());
@@ -16,16 +16,16 @@ AverageNode::AverageNode(const Format & format) :
 	for (auto& v : mAccum) v = 0.0;
 }
 
-AverageNode::~AverageNode()
+EnvelopeFollowerNode::~EnvelopeFollowerNode()
 {
 }
 
-void AverageNode::initialize()
+void EnvelopeFollowerNode::initialize()
 {
 
 }
 
-void AverageNode::process(ci::audio::Buffer * buffer)
+void EnvelopeFollowerNode::process(ci::audio::Buffer * buffer)
 {
 
 	float readValue, powValue, sqrValue = 0;

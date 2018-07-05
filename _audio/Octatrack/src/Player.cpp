@@ -13,7 +13,7 @@
 #include "cinder/Log.h"
 #include "AudioDrawUtils.h"
 #include "cinder/audio/ChannelRouterNode.h"
-#include "AverageNode.h"
+#include "EnvelopeFollowerNode.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -51,7 +51,7 @@ class PlayerApp : public App {
 	ci::audio::MonitorNodeRef	mInputMonitor;
 	ci::audio::ChannelRouterNodeRef mChannelRouter;
 	ci::audio::ChannelRouterNodeRef mRecRouter;
-	AverageNodeRef mAverageNode;
+	EnvelopeFollowerNodeRef mEnvelopeFollowerNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 
 	Receiver mReceiver;
@@ -79,8 +79,8 @@ void PlayerApp::setup()
 	mInputMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 	mAverageMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 	mChannelRouter = ctx->makeNode(new ci::audio::ChannelRouterNode());
-	mAverageNode = ctx->makeNode(new AverageNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
-	mAverageNode->setMultiplier(5);
+	mEnvelopeFollowerNode = ctx->makeNode(new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
+	mEnvelopeFollowerNode->setMultiplier(5);
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
@@ -114,7 +114,7 @@ void PlayerApp::setup()
 	mPlayer->enable();
 	mPlayer->setVolume(1);
 
-	mPlayer >> mAverageNode >> mAverageMonitor;
+	mPlayer >> mEnvelopeFollowerNode >> mAverageMonitor;
 	mAverageMonitor->enable();
 
 	mRecorder->attachTo(mPlayer);
@@ -299,8 +299,8 @@ void PlayerApp::draw()
 {
 	gl::clear( Color( 0, 0, 0 ) );
 	
-	if (mAverageNode &&
-		mAverageNode->getNumChannels() > 0 &&
+	if (mEnvelopeFollowerNode &&
+		mEnvelopeFollowerNode->getNumChannels() > 0 &&
 		mAverageMonitor &&
 		mAverageMonitor->getNumConnectedInputs()) {
 		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 100);

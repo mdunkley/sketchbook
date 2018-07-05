@@ -110,6 +110,7 @@
     <ClCompile Include="..\..\..\_common\src\AudioManager.cpp" />
     <ClCompile Include="..\..\..\_common\src\CommonUtils.cpp" />
     <ClCompile Include="..\..\..\_common\src\DistortionNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\EnvelopeFollowerNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\GrainNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\GranularPlayer.cpp" />
     <ClCompile Include="..\..\..\_common\src\Instrument.cpp" />
@@ -121,7 +122,6 @@
     <ClCompile Include="..\..\..\_common\src\PolySamplePlayer.cpp" />
     <ClCompile Include="..\..\..\_common\src\PolyWavetablePlayer.cpp" />
     <ClCompile Include="..\..\..\_common\src\Recorder.cpp" />
-    <ClCompile Include="..\..\..\_common\src\AverageNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\SampleBank.cpp" />
     <ClCompile Include="..\..\..\_common\src\SampleNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\SampleVoice.cpp" />
@@ -140,6 +140,7 @@
     <ClInclude Include="..\..\..\_common\include\AudioManager.hpp" />
     <ClInclude Include="..\..\..\_common\include\CommonUtils.h" />
     <ClInclude Include="..\..\..\_common\include\DistortionNode.h" />
+    <ClInclude Include="..\..\..\_common\include\EnvelopeFollowerNode.h" />
     <ClInclude Include="..\..\..\_common\include\GrainNode.h" />
     <ClInclude Include="..\..\..\_common\include\GranularPlayer.hpp" />
     <ClInclude Include="..\..\..\_common\include\Instrument.hpp" />
@@ -151,7 +152,6 @@
     <ClInclude Include="..\..\..\_common\include\PolySamplePlayer.hpp" />
     <ClInclude Include="..\..\..\_common\include\PolyWavetablePlayer.hpp" />
     <ClInclude Include="..\..\..\_common\include\Recorder.hpp" />
-    <ClInclude Include="..\..\..\_common\include\AverageNode.h" />
     <ClInclude Include="..\..\..\_common\include\SampleBank.h" />
     <ClInclude Include="..\..\..\_common\include\SampleNode.h" />
     <ClInclude Include="..\..\..\_common\include\SampleVoice.hpp" />
