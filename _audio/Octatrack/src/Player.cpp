@@ -6,7 +6,6 @@
 #include "cinder/audio/GainNode.h"
 #include "AudioManager.hpp"
 #include "SampleBank.h"
-#include "Sequencer.hpp"
 #include "GrainNode.h"
 #include "SampleNode.h"
 #include "CinderImGui.h"
@@ -55,8 +54,6 @@ class PlayerApp : public App {
 	AverageNodeRef mAverageNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 
-	SequencerRef mClock;
-
 	Receiver mReceiver;
 
 	bool mShowMenu = true;
@@ -82,7 +79,8 @@ void PlayerApp::setup()
 	mInputMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 	mAverageMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 	mChannelRouter = ctx->makeNode(new ci::audio::ChannelRouterNode());
-	mAverageNode = ctx->makeNode(new AverageNode());
+	mAverageNode = ctx->makeNode(new AverageNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
+	mAverageNode->setMultiplier(5);
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
@@ -98,7 +96,6 @@ void PlayerApp::setup()
 	mRootBank->loadAssetDirectoryByName("test");
 	ci::audio::BufferRef buffer = mRootBank->getRandomBuffer();
 
-	mClock = std::make_shared<Sequencer>();
 	mPlayer = ctx->makeNode( new SampleNode(ci::audio::Node::Format().channels(2)) );
 	mPlayer >> ctx->getOutput();
 	mPlayer->setBuffer( buffer );
@@ -110,8 +107,8 @@ void PlayerApp::setup()
 	mPlayer->getPositionParam()->setProcessor( mLfo );
 
 	mLfo->enable();
-	mPlayer->setTriggerSpeed(.05f);
-	mPlayer->setLength(mPlayer->getTriggerSpeed());
+
+	mPlayer->setDensity(20);
 	std::list<int> scale = { 0,5 };
 	mPlayer->setScale(scale);
 	mPlayer->enable();
@@ -123,10 +120,10 @@ void PlayerApp::setup()
 	mRecorder->attachTo(mPlayer);
 	mRecorder->record(false);
 
-	mClock->start();
 	ctx->enable();
 
 	setupOSC();
+	mPlayer->gate(true);
 }
 
 void PlayerApp::setupAudioDevice()
@@ -258,7 +255,7 @@ void PlayerApp::keyDown(KeyEvent event) {
 
 void PlayerApp::update()
 {
-	mClock->update();
+	//mClock->update();
 	inspector();
 	//console() << mPlayer->getNumActiveGrains() << std::endl;
 }
@@ -308,7 +305,7 @@ void PlayerApp::draw()
 		mAverageMonitor->getNumConnectedInputs()) {
 		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 100);
 		drawAudioBuffer(mAverageMonitor->getBuffer(), scopeRect, true);
-		//ci::app::console() << mAverageMonitor->getVolume() << std::endl;
+		ci::app::console() << mAverageMonitor->getBuffer()[0] << std::endl;
 	}
 	
 	/*

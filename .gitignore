@@ -18,6 +18,7 @@ ipch/
 *.dll
 *.tlog
 *.lib
+*.vspx
 
 # Finder
 .DS_Store
