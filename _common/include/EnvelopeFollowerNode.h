@@ -18,6 +18,7 @@ public:
 
 	void setMultiplier(float mult = 1.0f) { mMultiplier = mult; }
 	float getMultiplier() const { return mMultiplier; }
+	
 
 
 protected:
@@ -27,9 +28,9 @@ protected:
 
 private:
 
-	size_t mMaxAverage = 2500;
-	size_t mAverage = 1000;
-	std::array<double,128> mAccum;
+	size_t mMaxInterval = 2500;
+	size_t mInterval = 1000;
+	std::array<double,32> mAccum;
 	size_t mAccumCurSize = 0;
 	size_t mAccumPosition = 0;
 	float mMultiplier = 1.0;

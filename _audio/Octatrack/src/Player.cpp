@@ -305,7 +305,7 @@ void PlayerApp::draw()
 		mAverageMonitor->getNumConnectedInputs()) {
 		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 100);
 		drawAudioBuffer(mAverageMonitor->getBuffer(), scopeRect, true);
-		ci::app::console() << mAverageMonitor->getBuffer()[0] << std::endl;
+		//ci::app::console() << mAverageMonitor->getBuffer()[0] << std::endl;
 	}
 	
 	/*

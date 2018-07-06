@@ -11,8 +11,8 @@ using namespace cinder::log;
 EnvelopeFollowerNode::EnvelopeFollowerNode(const Format & format) :
 	Node(format)
 {
-	mAccumBuffer = std::make_shared<BufferDynamic>(mMaxAverage, getNumChannels());
-	CI_LOG_I("CHANNELS "<<getNumChannels());
+	mAccumBuffer = std::make_shared<BufferDynamic>(mMaxInterval, getNumChannels());
+	//CI_LOG_I("CHANNELS "<<getNumChannels());
 	for (auto& v : mAccum) v = 0.0;
 }
 
@@ -35,7 +35,7 @@ void EnvelopeFollowerNode::process(ci::audio::Buffer * buffer)
 	const auto &frameRange = getProcessFramesRange();
 	const size_t bufferFrames = frameRange.second - frameRange.first;
 	const size_t accumFrames = mAccumBuffer->getNumFrames();
-	const size_t accumSize = std::min(accumFrames, mAverage);
+	const size_t accumSize = std::min(accumFrames, mInterval);
 	float *accumData = mAccumBuffer->getData();
 	float *bufferData = buffer->getData();
 
@@ -43,27 +43,33 @@ void EnvelopeFollowerNode::process(ci::audio::Buffer * buffer)
 	
 	while (readCount < bufferFrames) {
 
-
 		if (mAccumCurSize > 0) {
 			for (int ch = 0; ch < totalChannels; ch++) {
 				size_t accumLookup = ch * accumFrames + mAccumPosition;
 				size_t bufferLookup = ch * bufferFrames + readCount;
-				float oldVal = accumData[accumLookup];
+				//float oldVal = accumData[accumLookup];
 				mAccum[ch] -= accumData[accumLookup];
 				readValue = bufferData[bufferLookup];
-				powValue = std::pow(readValue, 2);
-				accumData[accumLookup] = powValue;
-				mAccum[ch] += powValue;
-				sqrValue = std::sqrt(mAccum[ch] / mAccumCurSize);
+				if (readValue > 0) {
+					powValue = std::pow(readValue, 2);
+					accumData[accumLookup] = powValue;
+					mAccum[ch] += powValue;
+				}
+				else {
+					accumData[accumLookup] = 0;
+				}
+
+				double divVal = mAccum[ch] / std::max(mAccumCurSize,(size_t)1);
+				if( divVal>.00000001 ) sqrValue = std::sqrt(divVal);
+				else sqrValue = 0;
 				bufferData[bufferLookup] = sqrValue * mMultiplier;
 			}
 		}
 
-		if (mAccumCurSize < accumFrames) mAccumCurSize++;
+		if (mAccumCurSize < (accumSize)) mAccumCurSize++;
 		mAccumPosition++;
-		if (mAccumPosition >= accumFrames) mAccumPosition = 0;
+		if (mAccumPosition >= accumSize) mAccumPosition = 0;
 		readCount++;
-		//CI_LOG_I(accumData[0]);
 	
 	}
 	
