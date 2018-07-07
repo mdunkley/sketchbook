@@ -14,6 +14,7 @@
 #include "AudioDrawUtils.h"
 #include "cinder/audio/ChannelRouterNode.h"
 #include "EnvelopeFollowerNode.h"
+#include "ComparatorNode.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -53,6 +54,7 @@ class PlayerApp : public App {
 	ci::audio::ChannelRouterNodeRef mRecRouter;
 	EnvelopeFollowerNodeRef mEnvelopeFollowerNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
+	ComparatorNodeRef mComparator;
 
 	Receiver mReceiver;
 
@@ -81,6 +83,7 @@ void PlayerApp::setup()
 	mChannelRouter = ctx->makeNode(new ci::audio::ChannelRouterNode());
 	mEnvelopeFollowerNode = ctx->makeNode(new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
 	mEnvelopeFollowerNode->setMultiplier(5);
+	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
@@ -114,7 +117,7 @@ void PlayerApp::setup()
 	mPlayer->enable();
 	mPlayer->setVolume(1);
 
-	mPlayer >> mEnvelopeFollowerNode >> mAverageMonitor;
+	mPlayer >> mEnvelopeFollowerNode >> mComparator >> mAverageMonitor;
 	mAverageMonitor->enable();
 
 	mRecorder->attachTo(mPlayer);
@@ -272,7 +275,7 @@ bool PlayerApp::inspector()
 		if (ui::DragFloat("Density", &density, .1, 0, 100)) { mPlayer->setDensity(density); }
 		ui::DragFloat("Trigger Rate", &(mPlayer->mTriggerRate), .001, 0, 1);
 		ui::DragFloat("Trigger Rate Jitter", &(mPlayer->mTriggerRateJitter), .001, 0, 1);
-		ui::DragFloat("Position Jitter", &(mPlayer->mPositionJitter), .001, 0, 1);
+		ui::DragFloat("Position Jitter", &(mPlayer->mPositionJitter), .001, 0, 10);
 		ui::DragFloat("Rate", &(mPlayer->mRate), .001, -1, 1);
 		ui::DragFloat("Rate Jitter", &(mPlayer->mRateJitter), .001, 0, 1);
 		ui::DragFloat("Interval", &(mPlayer->mInterval),1, -36, 36);

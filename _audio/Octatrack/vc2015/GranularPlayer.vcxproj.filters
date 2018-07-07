@@ -122,6 +122,9 @@
     <ClCompile Include="..\..\..\_common\src\EnvelopeFollowerNode.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\_common\src\ComparatorNode.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Resources.h">
@@ -194,6 +197,9 @@
       <Filter>Audio</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\_common\include\EnvelopeFollowerNode.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_common\include\ComparatorNode.h">
       <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>

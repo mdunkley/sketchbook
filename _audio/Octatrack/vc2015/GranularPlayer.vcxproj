@@ -109,6 +109,7 @@
     <ClCompile Include="..\..\..\_common\src\AudioDrawUtils.cpp" />
     <ClCompile Include="..\..\..\_common\src\AudioManager.cpp" />
     <ClCompile Include="..\..\..\_common\src\CommonUtils.cpp" />
+    <ClCompile Include="..\..\..\_common\src\ComparatorNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\DistortionNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\EnvelopeFollowerNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\GrainNode.cpp" />
@@ -139,6 +140,7 @@
     <ClInclude Include="..\..\..\_common\include\AudioDrawUtils.h" />
     <ClInclude Include="..\..\..\_common\include\AudioManager.hpp" />
     <ClInclude Include="..\..\..\_common\include\CommonUtils.h" />
+    <ClInclude Include="..\..\..\_common\include\ComparatorNode.h" />
     <ClInclude Include="..\..\..\_common\include\DistortionNode.h" />
     <ClInclude Include="..\..\..\_common\include\EnvelopeFollowerNode.h" />
     <ClInclude Include="..\..\..\_common\include\GrainNode.h" />
