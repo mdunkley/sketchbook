@@ -15,6 +15,7 @@
 #include "cinder/audio/ChannelRouterNode.h"
 #include "EnvelopeFollowerNode.h"
 #include "ComparatorNode.h"
+#include "ClockNode.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -55,6 +56,7 @@ class PlayerApp : public App {
 	EnvelopeFollowerNodeRef mEnvelopeFollowerNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
+	ClockNodeRef mClockNode;
 
 	Receiver mReceiver;
 
@@ -84,6 +86,7 @@ void PlayerApp::setup()
 	mEnvelopeFollowerNode = ctx->makeNode(new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
 	mEnvelopeFollowerNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
+	mClockNode = ctx->makeNode(new ClockNode());
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
@@ -117,7 +120,13 @@ void PlayerApp::setup()
 	mPlayer->enable();
 	mPlayer->setVolume(1);
 
-	mPlayer >> mEnvelopeFollowerNode >> mComparator >> mAverageMonitor;
+	mClockNode->enable();
+	mClockNode >> mAverageMonitor;
+	mClockNode->setRate(.5);
+	mClockNode->setRateJitter(.1);
+	mClockNode->setDutyCycle(.1);
+	mClockNode->setDutyCycleJitter(.1);
+	//mPlayer >> mEnvelopeFollowerNode >> mComparator >> mAverageMonitor;
 	mAverageMonitor->enable();
 
 	mRecorder->attachTo(mPlayer);

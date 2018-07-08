@@ -16,6 +16,9 @@ public:
 	ComparatorNode(const Format &format = Format());
 	~ComparatorNode();
 
+	void setThreshold(float thresh) { mThreshold = thresh; }
+	float getThreshold() { return mThreshold; }
+
 protected:
 
 	void	initialize()							override;
@@ -23,7 +26,7 @@ protected:
 
 private:
 
-	float mThreshold = .25f;
+	std::atomic<float> mThreshold = .1f;
 
 };
 

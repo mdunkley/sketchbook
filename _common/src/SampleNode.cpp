@@ -53,7 +53,6 @@ void SampleNode::initialize()
 
 	// Calc envelope lookup
 	calcEnvelope(SampleEnvelopeType::constant);
-
 	calcPanLookup();
 	calcNoteLookup();
 
@@ -170,7 +169,8 @@ void SampleNode::initializeSample(SampleGrain* sample)
 			wrap(mPositionValues[mProcessReadCount] * bufferLength, 0, bufferLength) + 
 			mPositionJitter * Rand::randFloat(-1, 1)*sampleRate));
 	else
-		sample->position = size_t(abs(mPosition.getValue()*bufferLength + mPositionJitter * Rand::randFloat(-1, 1)*sampleRate));
+		sample->position = size_t(abs(mPosition.getValue()*bufferLength + 
+			mPositionJitter * Rand::randFloat(-1, 1)*sampleRate));
 
 	sample->age = 0;
 	sample->life = size_t(abs(mLength + mLengthJitter * Rand::randFloat(-1, 1))*sampleRate);
@@ -257,13 +257,11 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 
 			}
 
-
-
-
 		}
 
 		// write accumulated values into audio output buffer and zero the accumulator
 		for (int ch = 0; ch < numChannels; ch++) {
+
 			//ci::app::console() << mChannelAccum[ch] << std::endl;
 			data[ch * numFrames + readCount] = mChannelAccum[ch];
 			mChannelAccum[ch] = 0;

@@ -112,6 +112,7 @@
     <ClCompile Include="..\..\..\_common\src\ComparatorNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\DistortionNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\EnvelopeFollowerNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\ClockNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\GrainNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\GranularPlayer.cpp" />
     <ClCompile Include="..\..\..\_common\src\Instrument.cpp" />
@@ -143,6 +144,7 @@
     <ClInclude Include="..\..\..\_common\include\ComparatorNode.h" />
     <ClInclude Include="..\..\..\_common\include\DistortionNode.h" />
     <ClInclude Include="..\..\..\_common\include\EnvelopeFollowerNode.h" />
+    <ClInclude Include="..\..\..\_common\include\ClockNode.h" />
     <ClInclude Include="..\..\..\_common\include\GrainNode.h" />
     <ClInclude Include="..\..\..\_common\include\GranularPlayer.hpp" />
     <ClInclude Include="..\..\..\_common\include\Instrument.hpp" />
