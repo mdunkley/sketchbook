@@ -211,12 +211,28 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 	if (mPosition.eval()) 
 		mPositionValues = mPosition.getValueArray();
 
+	float const *triggerData = nullptr;
+	if (mTriggerInput.eval())
+		triggerData = mTriggerInput.getValueArray();
+
 	int readCount = 0;
 	int foundVoices = 0;
 
 	while (readCount < numFrames) {
 
 		mProcessReadCount = readCount;
+
+		// Audio Rate trigger setup
+		if (triggerData) {
+			float newValue = triggerData[readCount];
+			float offset = newValue - mOldTriggerValue;
+			if (offset < 0) mWaitingForTriggerEdge = true;
+			if (mWaitingForTriggerEdge && offset > 0) {
+				mWaitingForTriggerEdge = false;
+				tick();
+			}
+			mOldTriggerValue = newValue;
+		}
 
 		// Update timer if gated
 		if (mGate) {

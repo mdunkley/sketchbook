@@ -9,14 +9,11 @@
 
 using namespace cinder::log;
 
-ClockNode::ClockNode(const Format & format) :
-	Node(format)
-{
-}
 
 ClockNode::~ClockNode()
 {
 }
+
 
 void ClockNode::initialize()
 {
@@ -28,7 +25,7 @@ void ClockNode::initialize()
 void ClockNode::tick() {
 
 	mTimer = 0;
-	mNextTick = abs(mRate
+	mNextTick = abs(mRate * mClockDivisions
 		+ (mRateJitter*cinder::Rand::randFloat(-1, 1)))
 		* ci::audio::master()->getSampleRate();
 	mDuty = abs(mDutyCycle + mDutyCycleJitter * cinder::Rand::randFloat(-1, 1));
@@ -42,18 +39,51 @@ void ClockNode::process(ci::audio::Buffer *buffer)
 	const auto &frameRange = getProcessFramesRange();
 	size_t numFrames = frameRange.second - frameRange.first;
 	float *data = buffer->getData();
+	const float *syncData = nullptr;
+
+	if (mSync.eval()) {
+		syncData = mSync.getValueArray();
+	}
 
 	int readCount = 0;
 
 	while (readCount < numFrames) {
+	
+		if (syncData) {
 
-		if (mTimer >= mNextTick) tick();
+			float newValue = syncData[readCount];
+			float offset = newValue - mOldSyncValue;
+			if (offset < 0) mWaitingForRisingEdge = true;
+			if (mWaitingForRisingEdge && offset > 0) {
+				mWaitingForRisingEdge = false;
+				auto oldSyncTime = mSyncTime;
+				mSyncTime = ci::audio::master()->getNumProcessedSeconds();
+				mRate = mSyncTime - oldSyncTime;
+
+				mSyncCount++;
+				if (mSyncCount >= mClockDivisions) {
+					tick();
+					mSyncCount = 0;
+				}
+
+			}
+			mOldSyncValue = newValue;
+		}
+		else {
+			if (mTimer >= mNextTick) tick();	
+		}
+
 		mTimer++;
 
 		float ramp = float(mTimer) / mNextTick;
 		for (int ch = 0; ch < numChannels; ch++) {
 			size_t lookup = ch * numFrames + readCount;
-			data[lookup] = ramp<mDuty;
+			if (mMode == OutputMode::gate) {
+				data[lookup] = ramp < mDuty;
+			}
+			else if (mMode == OutputMode::ramp) {
+				data[lookup] = ramp;
+			}
 		}
 
 		readCount++;

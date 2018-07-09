@@ -56,6 +56,7 @@ class PlayerApp : public App {
 	EnvelopeFollowerNodeRef mEnvelopeFollowerNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
+	ClockNodeRef mMasterClock;
 	ClockNodeRef mClockNode;
 
 	Receiver mReceiver;
@@ -87,6 +88,7 @@ void PlayerApp::setup()
 	mEnvelopeFollowerNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
 	mClockNode = ctx->makeNode(new ClockNode());
+	mMasterClock = ctx->makeNode(new ClockNode());
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
@@ -122,10 +124,17 @@ void PlayerApp::setup()
 
 	mClockNode->enable();
 	mClockNode >> mAverageMonitor;
-	mClockNode->setRate(.5);
-	mClockNode->setRateJitter(.1);
-	mClockNode->setDutyCycle(.1);
-	mClockNode->setDutyCycleJitter(.1);
+	mClockNode->setRate( 5 );
+	mClockNode->setMode( ClockNode::OutputMode::ramp );
+
+	mMasterClock->enable();
+	mMasterClock->setRate(.2);
+	mClockNode->getSyncParam()->setProcessor(mMasterClock);
+
+	mPlayer->getTriggerInputParam()->setProcessor(mMasterClock);
+	//mClockNode->setRateJitter(.5);
+	//mClockNode->setDutyCycle(.1);
+	//mClockNode->setDutyCycleJitter(.1);
 	//mPlayer >> mEnvelopeFollowerNode >> mComparator >> mAverageMonitor;
 	mAverageMonitor->enable();
 
@@ -229,7 +238,6 @@ void PlayerApp::mouseMove(MouseEvent event) {
 	float relY = ci::clamp(1-(event.getY() / float(app::getWindowHeight())), 0.0f, 1.0f);
 	mPlayer->setPosition(relX);
 	mPlayer->setInterval(std::floor(72 * (relY - .5)));
-
 }
 
 void PlayerApp::mouseDrag(MouseEvent event) {
@@ -300,6 +308,15 @@ bool PlayerApp::inspector()
 		bool record = mRecorder->isRecording();
 		if (ui::Checkbox("Record", &record)) {
 			mRecorder->record(record);
+		}
+
+		float clockrate = mMasterClock->getRate();
+		if (ui::DragFloat("Clock Rate", &clockrate,.001,0,1)) {
+			mMasterClock->setRate(clockrate);
+		}
+		int clockdivs = mMasterClock->getClockDivisions();
+		if (ui::DragInt("Clock Divisions", &clockdivs,1,8)) {
+			mMasterClock->setClockDivisions(clockdivs);
 		}
 		
 

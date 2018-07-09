@@ -54,10 +54,11 @@ private:
 class SampleNode : public ci::audio::Node {
 public:
 
-	SampleNode(const Format &format = Format()) : Node(format), mPosition(this) {}
+	SampleNode(const Format &format = Format()) : Node(format), mPosition(this), mTriggerInput(this) {}
 
-	enum SampleEnvelopeType { constant, hann, hamming };
+	enum class SampleEnvelopeType { constant, hann, hamming };
 
+	ci::audio::Param* getTriggerInputParam() { return &mTriggerInput; }
 	ci::audio::Param* getPositionParam() { return &mPosition; }
 
 	void setBuffer(ci::audio::BufferRef buffer);
@@ -142,6 +143,10 @@ private:
 	size_t mBufferChannels = 0;
 
 	bool mGate = false;
+
+	ci::audio::Param mTriggerInput;
+	float mOldTriggerValue = 0.0;
+	bool mWaitingForTriggerEdge = false;
 
 	ci::audio::Param mPosition;
 	const float *mPositionValues = nullptr;
