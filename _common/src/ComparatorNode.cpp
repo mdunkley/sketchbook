@@ -9,7 +9,8 @@
 using namespace cinder::log;
 
 ComparatorNode::ComparatorNode(const Format & format) :
-	Node(format)
+	Node(format),
+	mThreshold(this)
 {
 }
 
@@ -29,6 +30,9 @@ void ComparatorNode::process(ci::audio::Buffer * buffer)
 	const size_t bufferFrames = frameRange.second - frameRange.first;
 	float *bufferData = buffer->getData();
 
+	const float* threshData = nullptr;
+	if (mThreshold.eval()) threshData = mThreshold.getValueArray();
+
 	int readCount = 0;
 	
 	while (readCount < bufferFrames) {
@@ -36,7 +40,8 @@ void ComparatorNode::process(ci::audio::Buffer * buffer)
 		for (int ch = 0; ch < numChannels; ch++) {
 
 			size_t bufferLookup = ch * bufferFrames + readCount;
-			bufferData[bufferLookup] = bufferData[bufferLookup] > mThreshold;
+			if( threshData ) bufferData[bufferLookup] = bufferData[bufferLookup] > threshData[readCount];
+			else bufferData[bufferLookup] = bufferData[bufferLookup] > mThreshold.getValue();
 			
 		}
 		readCount++;

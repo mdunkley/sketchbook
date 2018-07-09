@@ -16,8 +16,8 @@ public:
 	ComparatorNode(const Format &format = Format());
 	~ComparatorNode();
 
-	void setThreshold(float thresh) { mThreshold = thresh; }
-	float getThreshold() { return mThreshold; }
+	void setThreshold(float thresh) { mThreshold.setValue(thresh); }
+	float getThreshold() { return mThreshold.getValue(); }
 
 protected:
 
@@ -26,7 +26,7 @@ protected:
 
 private:
 
-	std::atomic<float> mThreshold = .1f;
+	ci::audio::Param mThreshold;
 
 };
 
