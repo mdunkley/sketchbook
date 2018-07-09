@@ -123,7 +123,7 @@ void PlayerApp::setup()
 	mPlayer->setVolume(1);
 
 	mClockNode->enable();
-	mClockNode >> mAverageMonitor;
+	mMasterClock >> mAverageMonitor;
 	mClockNode->setRate( 5 );
 	mClockNode->setMode( ClockNode::OutputMode::ramp );
 
@@ -131,7 +131,7 @@ void PlayerApp::setup()
 	mMasterClock->setRate(.2);
 	mClockNode->getSyncParam()->setProcessor(mMasterClock);
 
-	mPlayer->getTriggerInputParam()->setProcessor(mMasterClock);
+	mPlayer->getTriggerParam()->setProcessor(mMasterClock);
 	//mClockNode->setRateJitter(.5);
 	//mClockNode->setDutyCycle(.1);
 	//mClockNode->setDutyCycleJitter(.1);
@@ -309,13 +309,12 @@ bool PlayerApp::inspector()
 		if (ui::Checkbox("Record", &record)) {
 			mRecorder->record(record);
 		}
-
 		float clockrate = mMasterClock->getRate();
 		if (ui::DragFloat("Clock Rate", &clockrate,.001,0,1)) {
 			mMasterClock->setRate(clockrate);
 		}
 		int clockdivs = mMasterClock->getClockDivisions();
-		if (ui::DragInt("Clock Divisions", &clockdivs,1,8)) {
+		if (ui::DragInt("Clock Divisions", &clockdivs,1,1,8)) {
 			mMasterClock->setClockDivisions(clockdivs);
 		}
 		

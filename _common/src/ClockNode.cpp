@@ -41,9 +41,7 @@ void ClockNode::process(ci::audio::Buffer *buffer)
 	float *data = buffer->getData();
 	const float *syncData = nullptr;
 
-	if (mSync.eval()) {
-		syncData = mSync.getValueArray();
-	}
+	if (mSync.eval()) syncData = mSync.getValueArray();
 
 	int readCount = 0;
 
@@ -69,9 +67,8 @@ void ClockNode::process(ci::audio::Buffer *buffer)
 			}
 			mOldSyncValue = newValue;
 		}
-		else {
-			if (mTimer >= mNextTick) tick();	
-		}
+		else if (mTimer >= mNextTick) tick();	
+		
 
 		mTimer++;
 

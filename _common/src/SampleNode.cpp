@@ -215,6 +215,10 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 	if (mTriggerInput.eval())
 		triggerData = mTriggerInput.getValueArray();
 
+	float const *gateData = nullptr;
+	if (mGateInput.eval())
+		gateData = mGateInput.getValueArray();
+
 	int readCount = 0;
 	int foundVoices = 0;
 
@@ -232,6 +236,11 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 				tick();
 			}
 			mOldTriggerValue = newValue;
+		}
+
+		if (gateData) {
+			int gateValue = gateData[readCount] > 0;
+			mGate = gateValue;
 		}
 
 		// Update timer if gated
