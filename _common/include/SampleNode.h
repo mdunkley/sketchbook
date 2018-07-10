@@ -72,8 +72,6 @@ public:
 	float getTriggerSpeed() const { return mTriggerRate; }
 	void setTriggerSpeedJitter(float jitter) { mTriggerRateJitter = jitter; }
 	float getTriggerSpeedJitter() const { return mTriggerRateJitter; }
-	void setDensity(float density) { mTriggerRate = 1.0f / density; setLength(mTriggerRate * 8); }
-	float getDensity() const { return 1.0f / mTriggerRate; }
 
 	void setPosition(float phase) { mPosition.setValue( phase ); }
 	float getPosition() const { return mPosition.getValue(); }

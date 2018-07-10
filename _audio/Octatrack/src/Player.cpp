@@ -112,11 +112,11 @@ void PlayerApp::setup()
 	mLfo = ctx->makeNode( new ci::audio::GenPhasorNode() );
 	mLfo->setFreq( ci::audio::master()->getSampleRate()/float(buffer->getNumFrames()) );
 	
-	mPlayer->getPositionParam()->setProcessor( mLfo );
+	//mPlayer->getPositionParam()->setProcessor( mLfo );
 
-	mLfo->enable();
+	//mLfo->enable();
 
-	mPlayer->setDensity(20);
+
 	std::list<int> scale = { 0,5 };
 	mPlayer->setScale(scale);
 	mPlayer->enable();
@@ -131,7 +131,7 @@ void PlayerApp::setup()
 	mMasterClock->setRate(.2);
 	mClockNode->getSyncParam()->setProcessor(mMasterClock);
 
-	mPlayer->getTriggerParam()->setProcessor(mMasterClock);
+	mPlayer->getTriggerParam()->setProcessor(mClockNode);
 	//mClockNode->setRateJitter(.5);
 	//mClockNode->setDutyCycle(.1);
 	//mClockNode->setDutyCycleJitter(.1);
@@ -144,7 +144,7 @@ void PlayerApp::setup()
 	ctx->enable();
 
 	setupOSC();
-	mPlayer->gate(true);
+	
 }
 
 void PlayerApp::setupAudioDevice()
@@ -224,28 +224,28 @@ void PlayerApp::setupOSC() {
 
 void PlayerApp::mouseUp(MouseEvent event)
 {
-	mPlayer->gate(false);
+	//mPlayer->gate(false);
 }
 
 void PlayerApp::mouseDown( MouseEvent event )
 {
-	mPlayer->gate(true);
+	//mPlayer->gate(true);
 }
 
 void PlayerApp::mouseMove(MouseEvent event) {
 
 	float relX = ci::clamp( event.getX() / float(app::getWindowWidth()), 0.0f, 1.0f);
 	float relY = ci::clamp(1-(event.getY() / float(app::getWindowHeight())), 0.0f, 1.0f);
-	mPlayer->setPosition(relX);
-	mPlayer->setInterval(std::floor(72 * (relY - .5)));
+	//mPlayer->setPosition(relX);
+	//mPlayer->setInterval(std::floor(72 * (relY - .5)));
 }
 
 void PlayerApp::mouseDrag(MouseEvent event) {
 
 	float relX = ci::clamp(event.getX() / float(app::getWindowWidth()), 0.0f, 1.0f);
 	float relY = ci::clamp(1 - (event.getY() / float(app::getWindowHeight())), 0.0f, 1.0f);
-	mPlayer->setPosition(relX);
-	mPlayer->setInterval(std::floor(72 * (relY - .5)));
+	//mPlayer->setPosition(relX);
+	//mPlayer->setInterval(std::floor(72 * (relY - .5)));
 
 }
 
@@ -277,6 +277,7 @@ void PlayerApp::update()
 {
 	//mClock->update();
 	inspector();
+	mPlayer->setLength(mClockNode->getRate());
 	//console() << mPlayer->getNumActiveGrains() << std::endl;
 }
 
@@ -284,14 +285,27 @@ bool PlayerApp::inspector()
 {
 	if (mShowMenu) {
 
-
 		ui::ScopedWindow window("Setup (Spacebar to toggle)");
 		ui::SetWindowFontScale(getDisplay()->getWidth()/1920.0f);
 
-		float density = mPlayer->getDensity();
-		if (ui::DragFloat("Density", &density, .1, 0, 100)) { mPlayer->setDensity(density); }
+		float clockrate = mMasterClock->getRate();
+		if (ui::DragFloat("Clock Rate", &clockrate, .001, 0, 1)) {
+			mMasterClock->setRate(clockrate);
+		}
+
+		float clockjitter = mMasterClock->getRateJitter();
+		if (ui::DragFloat("Clock Jitter", &clockjitter, .001, 0, 4)) {
+			mMasterClock->setRateJitter(clockjitter);
+		}
+
+		int clockdivs = mMasterClock->getClockDivisions();
+		if (ui::DragInt("Clock Divisions", &clockdivs, 1, 1, 8)) {
+			mMasterClock->setClockDivisions(clockdivs);
+		}
 		ui::DragFloat("Trigger Rate", &(mPlayer->mTriggerRate), .001, 0, 1);
 		ui::DragFloat("Trigger Rate Jitter", &(mPlayer->mTriggerRateJitter), .001, 0, 1);
+		float pos = mPlayer->getPosition();
+		if (ui::DragFloat("Position", &pos, .001, 0, 1)) { mPlayer->setPosition(pos); }
 		ui::DragFloat("Position Jitter", &(mPlayer->mPositionJitter), .001, 0, 10);
 		ui::DragFloat("Rate", &(mPlayer->mRate), .001, -1, 1);
 		ui::DragFloat("Rate Jitter", &(mPlayer->mRateJitter), .001, 0, 1);
@@ -309,14 +323,7 @@ bool PlayerApp::inspector()
 		if (ui::Checkbox("Record", &record)) {
 			mRecorder->record(record);
 		}
-		float clockrate = mMasterClock->getRate();
-		if (ui::DragFloat("Clock Rate", &clockrate,.001,0,1)) {
-			mMasterClock->setRate(clockrate);
-		}
-		int clockdivs = mMasterClock->getClockDivisions();
-		if (ui::DragInt("Clock Divisions", &clockdivs,1,1,8)) {
-			mMasterClock->setClockDivisions(clockdivs);
-		}
+
 		
 
 	}
