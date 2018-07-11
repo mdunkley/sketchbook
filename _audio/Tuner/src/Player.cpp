@@ -17,8 +17,6 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-using Receiver = osc::ReceiverUdp;
-using protocol = asio::ip::udp;
 
 class PlayerApp : public App {
   public:
@@ -27,7 +25,7 @@ class PlayerApp : public App {
 
 	void setup() override;
 	void setupAudioDevice();
-	void setupOSC();
+
 	void mouseUp(MouseEvent event) override;
 	void mouseDown( MouseEvent event ) override;
 	void mouseMove(MouseEvent event);
@@ -41,16 +39,11 @@ class PlayerApp : public App {
 	ci::audio::InputDeviceNodeRef mInputDeviceNode;
 	ci::audio::MonitorNodeRef	mInputMonitor;
 
-	EnvelopeFollowerNodeRef mEnvelopeFollowerNode;
+
 	ci::audio::MonitorNodeRef mAverageMonitor;
-	ComparatorNodeRef mComparator;
-	ClockNodeRef mMasterClock;
-	ClockNodeRef mClockNode;
 	TunerNodeRef mTuner;
 	GenSineNodeRef mSine;
 	GenTriangleNodeRef mTriangle;
-
-	Receiver mReceiver;
 
 	bool mShowMenu = true;
 };
@@ -58,7 +51,6 @@ class PlayerApp : public App {
 const uint16_t localPort = 4000;
 
 PlayerApp::PlayerApp()
-	: mReceiver(localPort)
 {
 }
 
@@ -74,25 +66,10 @@ void PlayerApp::setup()
 	mInputMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 	mAverageMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 
-	mEnvelopeFollowerNode = ctx->makeNode(
-		new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).
-		channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
-	mEnvelopeFollowerNode->setMultiplier(5);
-	mComparator = ctx->makeNode(
-		new ComparatorNode(ci::audio::Node::Format().channels(2)));
-	mClockNode = ctx->makeNode(new ClockNode());
-	mMasterClock = ctx->makeNode(new ClockNode());
 	mSine = ctx->makeNode(new GenSineNode());
 	mTriangle = ctx->makeNode(new GenTriangleNode());
 	mTuner = ctx->makeNode(new TunerNode());
 
-	mClockNode->enable();
-	mClockNode->setRate( 5 );
-	mClockNode->setMode( ClockNode::OutputMode::ramp );
-
-	mMasterClock->enable();
-	mMasterClock->setRate(.2);
-	mClockNode->getSyncParam()->setProcessor(mMasterClock);
 	mTriangle->setFreq(200);
 	mSine->setFreq(200);
 	mTriangle >> mTuner;
@@ -106,8 +83,6 @@ void PlayerApp::setup()
 	mTuner->enable();
 	mTriangle->enable();
 	ctx->enable();
-
-	setupOSC();
 	
 }
 
@@ -153,62 +128,27 @@ void PlayerApp::setupAudioDevice()
 
 }
 
-void PlayerApp::setupOSC() {
-
-	mReceiver.setListener("/4/xy",
-		[&](const osc::Message &msg) {
-
-	});
-
-	mReceiver.setListener("/4/toggle1",
-		[&](const osc::Message &msg) {
-
-	});
-
-
-	try { mReceiver.bind();	}
-	catch (const osc::Exception &ex) {
-		CI_LOG_E("Error binding: " << ex.what() << " val: " << ex.value());
-		quit();
-	}
-
-	mReceiver.listen(
-		[](asio::error_code error, protocol::endpoint endpoint) -> bool {
-		if (error) {
-			CI_LOG_E("Error Listening: " << error.message() << " val: " << error.value() << " endpoint: " << endpoint);
-			return false;
-		}
-		else
-			return true;
-	});
-
-	
-}
-
 void PlayerApp::mouseUp(MouseEvent event)
 {
-	//mPlayer->gate(false);
+
 }
 
 void PlayerApp::mouseDown( MouseEvent event )
 {
-	//mPlayer->gate(true);
+
 }
 
 void PlayerApp::mouseMove(MouseEvent event) {
 
 	float relX = ci::clamp( event.getX() / float(app::getWindowWidth()), 0.0f, 1.0f);
 	float relY = ci::clamp(1-(event.getY() / float(app::getWindowHeight())), 0.0f, 1.0f);
-	//mSine->setFreq(ci::audio::midiToFreq(std::floor(relX * 127)));
-	//mPlayer->setInterval(std::floor(72 * (relY - .5)));
+
 }
 
 void PlayerApp::mouseDrag(MouseEvent event) {
 
 	float relX = ci::clamp(event.getX() / float(app::getWindowWidth()), 0.0f, 1.0f);
 	float relY = ci::clamp(1 - (event.getY() / float(app::getWindowHeight())), 0.0f, 1.0f);
-	//mPlayer->setPosition(relX);
-	//mPlayer->setInterval(std::floor(72 * (relY - .5)));
 
 }
 
@@ -227,34 +167,16 @@ void PlayerApp::keyDown(KeyEvent event) {
 
 void PlayerApp::update()
 {
-	//mClock->update();
 	inspector();
-
-	//console() << mPlayer->getNumActiveGrains() << std::endl;
 }
 
 bool PlayerApp::inspector()
 {
+	mShowMenu = false;
 	if (mShowMenu) {
 
 		ui::ScopedWindow window("Setup (Spacebar to toggle)");
 		ui::SetWindowFontScale(getDisplay()->getWidth()/1920.0f);
-
-		float clockrate = mMasterClock->getRate();
-		if (ui::DragFloat("Clock Rate", &clockrate, .001, 0, 1)) {
-			mMasterClock->setRate(clockrate);
-		}
-
-		float clockjitter = mMasterClock->getRateJitter();
-		if (ui::DragFloat("Clock Jitter", &clockjitter, .001, 0, 4)) {
-			mMasterClock->setRateJitter(clockjitter);
-		}
-
-		int clockdivs = mMasterClock->getClockDivisions();
-		if (ui::DragInt("Clock Divisions", &clockdivs, 1, 1, 8)) {
-			mMasterClock->setClockDivisions(clockdivs);
-		}
-
 	}
 	return 1;
 }
@@ -263,28 +185,12 @@ void PlayerApp::draw()
 {
 	gl::clear( Color( 0, 0, 0 ) );
 	
-	if (mEnvelopeFollowerNode &&
-		mEnvelopeFollowerNode->getNumChannels() > 0 &&
-		mAverageMonitor &&
+	if (mAverageMonitor &&
 		mAverageMonitor->getNumConnectedInputs()) {
 		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 100);
 		drawAudioBuffer(mAverageMonitor->getBuffer(), scopeRect, true);
-		//ci::app::console() << mAverageMonitor->getBuffer()[0] << std::endl;
 	}
 	
-	/*
-	// Draw the Scope's recorded Buffer in the upper right.
-	if (mInputDeviceNode && 
-		mInputDeviceNode->getNumChannels() > 0 && 
-		mInputMonitor && 
-		mInputMonitor->getNumConnectedInputs()) {
-		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 510);
-		drawAudioBuffer(mInputMonitor->getBuffer(), scopeRect, true);
-	}
-	*/
-	
-
-
 }
 
 CINDER_APP( PlayerApp, RendererGl )
