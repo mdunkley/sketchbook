@@ -1,0 +1,171 @@
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{574B5526-D72E-43E5-B652-65875DAA884E}</ProjectGuid>
+    <RootNamespace>GranularPlayer</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>Tuner</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\_common\include;..\include;..\..\..\..\Libraries\Cinder\include;..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui;..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\include;..\..\..\..\Libraries\Cinder\blocks\OSC\src\cinder\osc\</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>"..\..\..\..\Cinder\include";..\include</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>cinder.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\..\Libraries\Cinder\lib\msw\$(PlatformTarget);..\..\..\..\Libraries\Cinder\lib\msw\$(PlatformTarget)\$(Configuration)\$(PlatformToolset)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <IgnoreSpecificDefaultLibraries>LIBCMT;LIBCPMT</IgnoreSpecificDefaultLibraries>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\..\..\_common\include;..\include;..\..\..\..\Libraries\Cinder\include;..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui;..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\include;..\..\..\..\Libraries\Cinder\blocks\OSC\src\cinder\osc\</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WIN32_WINNT=0x0601;_WINDOWS;NOMINMAX;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>"..\..\..\..\Cinder\include";..\include</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>cinder.lib;OpenGL32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\..\..\Libraries\Cinder\lib\msw\$(PlatformTarget);..\..\..\..\Libraries\Cinder\lib\msw\$(PlatformTarget)\$(Configuration)\$(PlatformToolset)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding />
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resources.rc" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui.cpp" />
+    <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui_demo.cpp" />
+    <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui_draw.cpp" />
+    <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\src\CinderImGui.cpp" />
+    <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\OSC\src\cinder\osc\Osc.cpp" />
+    <ClCompile Include="..\..\..\_common\src\AudioDrawUtils.cpp" />
+    <ClCompile Include="..\..\..\_common\src\AudioManager.cpp" />
+    <ClCompile Include="..\..\..\_common\src\CommonUtils.cpp" />
+    <ClCompile Include="..\..\..\_common\src\ComparatorNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\DistortionNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\EnvelopeFollowerNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\ClockNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\GrainNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\GranularPlayer.cpp" />
+    <ClCompile Include="..\..\..\_common\src\Instrument.cpp" />
+    <ClCompile Include="..\..\..\_common\src\LiveChannel.cpp" />
+    <ClCompile Include="..\..\..\_common\src\MoogFilterNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\NoteSequencer.cpp" />
+    <ClCompile Include="..\..\..\_common\src\Pattern.cpp" />
+    <ClCompile Include="..\..\..\_common\src\PitchedBufferPlayerNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\PolySamplePlayer.cpp" />
+    <ClCompile Include="..\..\..\_common\src\PolyWavetablePlayer.cpp" />
+    <ClCompile Include="..\..\..\_common\src\Recorder.cpp" />
+    <ClCompile Include="..\..\..\_common\src\SampleBank.cpp" />
+    <ClCompile Include="..\..\..\_common\src\SampleNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\SampleVoice.cpp" />
+    <ClCompile Include="..\..\..\_common\src\SequencedSample.cpp" />
+    <ClCompile Include="..\..\..\_common\src\Sequencer.cpp" />
+    <ClCompile Include="..\..\..\_common\src\TunerNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\WavetableVoice.cpp" />
+    <ClCompile Include="..\src\Player.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\include\CinderImGui.h" />
+    <ClInclude Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imconfig.h" />
+    <ClInclude Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui.h" />
+    <ClInclude Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui_internal.h" />
+    <ClInclude Include="..\..\..\..\Libraries\Cinder\blocks\OSC\src\cinder\osc\Osc.h" />
+    <ClInclude Include="..\..\..\_common\include\AudioDrawUtils.h" />
+    <ClInclude Include="..\..\..\_common\include\AudioManager.hpp" />
+    <ClInclude Include="..\..\..\_common\include\CommonUtils.h" />
+    <ClInclude Include="..\..\..\_common\include\ComparatorNode.h" />
+    <ClInclude Include="..\..\..\_common\include\DistortionNode.h" />
+    <ClInclude Include="..\..\..\_common\include\EnvelopeFollowerNode.h" />
+    <ClInclude Include="..\..\..\_common\include\ClockNode.h" />
+    <ClInclude Include="..\..\..\_common\include\GrainNode.h" />
+    <ClInclude Include="..\..\..\_common\include\GranularPlayer.hpp" />
+    <ClInclude Include="..\..\..\_common\include\Instrument.hpp" />
+    <ClInclude Include="..\..\..\_common\include\LiveChannel.h" />
+    <ClInclude Include="..\..\..\_common\include\MoogFilterNode.h" />
+    <ClInclude Include="..\..\..\_common\include\NoteSequencer.h" />
+    <ClInclude Include="..\..\..\_common\include\Pattern.h" />
+    <ClInclude Include="..\..\..\_common\include\PitchedBufferPlayerNode.hpp" />
+    <ClInclude Include="..\..\..\_common\include\PolySamplePlayer.hpp" />
+    <ClInclude Include="..\..\..\_common\include\PolyWavetablePlayer.hpp" />
+    <ClInclude Include="..\..\..\_common\include\Recorder.hpp" />
+    <ClInclude Include="..\..\..\_common\include\SampleBank.h" />
+    <ClInclude Include="..\..\..\_common\include\SampleNode.h" />
+    <ClInclude Include="..\..\..\_common\include\SampleVoice.hpp" />
+    <ClInclude Include="..\..\..\_common\include\SequencedSample.h" />
+    <ClInclude Include="..\..\..\_common\include\Sequencer.hpp" />
+    <ClInclude Include="..\..\..\_common\include\TunerNode.h" />
+    <ClInclude Include="..\..\..\_common\include\WavetableVoice.hpp" />
+    <ClInclude Include="..\include\Resources.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets" />
+</Project>
