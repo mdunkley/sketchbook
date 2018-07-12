@@ -135,6 +135,7 @@ void PlayerApp::mouseUp(MouseEvent event)
 
 void PlayerApp::mouseDown( MouseEvent event )
 {
+	mTuner->calibrate();
 
 }
 
