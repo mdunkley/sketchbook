@@ -30,7 +30,7 @@ private:
 	size_t	mPrevCrossing = 0;
 	double	mFrequency = 0;
 	int		mDetectedNote = 0;
-	int		mPlayedNote = 0;
+	int		mPlayedValue = 0;
 	double	mPrevFrequency = 0;
 	size_t	mCount = 0;
 	bool	mPrevSign =false;

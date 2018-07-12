@@ -31,7 +31,7 @@ void TunerNode::process(ci::audio::Buffer * buffer)
 	const size_t bufferFrames = frameRange.second - frameRange.first;
 	float *bufferData = buffer->getData();
 
-	float inc = 1.0/ci::audio::master()->getSampleRate()/10;
+	float inc = 1.0/ci::audio::master()->getSampleRate()/20;
 
 	int readCount = 0;
 	while (readCount < bufferFrames) {
@@ -44,11 +44,12 @@ void TunerNode::process(ci::audio::Buffer * buffer)
 		{
 			int newNote = std::round(ci::audio::freqToMidi(float(mSampleRate) / mCount * .5));
 			mFrequency = ci::audio::midiToFreq(newNote);
-			if (mFrequency != mPrevFrequency) {
-				mLookup[mPlayedNote] = mDetectedNote;
-				CI_LOG_D(mPlayedNote<<" " << mLookup[mPlayedNote]);
+			if ((newNote != mDetectedNote) && (mLookup[newNote]==0)) {
+				mLookup[mDetectedNote] = ci::audio::midiToFreq( mPlayedValue );
+				//CI_LOG_D(mPlayedValue <<" " << mDetectedNote << " " << mLookup[mDetectedNote]);
+				mDetectedNote = newNote;
 			}
-			mDetectedNote = newNote;
+
 			mCount = 0;
 			mPrevFrequency = mFrequency;
 			mPrevSign = thisSign;
@@ -56,8 +57,8 @@ void TunerNode::process(ci::audio::Buffer * buffer)
 
 		mAccum += inc;
 		if (mAccum >= 1) mAccum = 0;
-		mPlayedNote = std::round(mAccum*127.0);
-		bufferData[readCount] = ci::audio::midiToFreq(mPlayedNote);
+		mPlayedValue = mAccum*127.0;
+		bufferData[readCount] = ci::audio::midiToFreq(mPlayedValue);
 
 		readCount++;
 
