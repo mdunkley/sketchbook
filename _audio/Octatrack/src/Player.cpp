@@ -16,6 +16,7 @@
 #include "EnvelopeFollowerNode.h"
 #include "ComparatorNode.h"
 #include "ARClockNode.h"
+#include "ARSequencerNode.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -48,6 +49,7 @@ class PlayerApp : public App {
 
 	ci::audio::GenPhasorNodeRef mLfo;
 	ci::audio::GainNodeRef mLfoMult;
+	ARSequencerNodeRef mSeq;
 
 	AudioRecorderRef mRecorder;
 	ci::audio::InputDeviceNodeRef mInputDeviceNode;
@@ -59,6 +61,7 @@ class PlayerApp : public App {
 	ComparatorNodeRef mComparator;
 	ARClockNodeRef mMasterClock;
 	ARClockNodeRef mClockNode;
+	
 
 	Receiver mReceiver;
 
@@ -90,6 +93,7 @@ void PlayerApp::setup()
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
 	mClockNode = ctx->makeNode(new ARClockNode());
 	mMasterClock = ctx->makeNode(new ARClockNode());
+	mSeq = ctx->makeNode(new ARSequencerNode());
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
@@ -119,15 +123,19 @@ void PlayerApp::setup()
 	mPlayer->setVolume(1);
 
 	mClockNode->enable();
-	mMasterClock >> mAverageMonitor;
+	mSeq >> mAverageMonitor;
+	std::vector<float> sequence = { 1,0,0,1,0 };
+	mSeq->setSequence(sequence);
+
 	mClockNode->setRate( 5 );
 	mClockNode->setMode( ARClockNode::OutputMode::ramp );
 
 	mMasterClock->enable();
 	mMasterClock->setRate(.2);
 	mClockNode->getSyncParam()->setProcessor(mMasterClock);
+	mClockNode >> mSeq;
 
-	mPlayer->getTriggerParam()->setProcessor(mClockNode);
+	mPlayer->getTriggerParam()->setProcessor(mSeq);
 	mAverageMonitor->enable();
 	mRecorder->attachTo(mPlayer);
 	mRecorder->record(false);

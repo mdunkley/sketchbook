@@ -68,17 +68,16 @@ namespace AudioOp {
 
 	class TriggerDetect {
 	public:
-		TriggerDetect() { mPrevValue.fill(0); }
 
 		float process(float value, int ch = 0, float thresh = .1f) { 
 			float tval = value > thresh;
-			float outValue = ci::clamp(mPrevValue[ch] - tval,0.0f,1.0f);
-			mPrevValue[ch] = tval;
-			return tval;
+			float outValue = ci::clamp(mPrevValue - tval,0.0f,1.0f);
+			mPrevValue = tval;
+			return outValue;
 		}
 
 	private:
-		std::array<float,32> mPrevValue;
+		float mPrevValue;
 
 	};
 }

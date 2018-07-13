@@ -6,22 +6,61 @@
 #include "cinder/audio/Buffer.h"
 #include "CommonUtils.h"
 
+
 using namespace cinder::log;
 
 ARSequencerNode::ARSequencerNode(const Format & format) :
 	Node(format),
-	mThreshold(this),
 	mPosition(this)
 {
+	mSequence.fill(0);
 }
 
 ARSequencerNode::~ARSequencerNode()
 {
 }
 
+void ARSequencerNode::setSequence(std::vector<float> values)
+{
+	int size = std::min(values.size(), (size_t)256);
+	for (int i=0; i < size; i++) { mSequence[i] = values.at(i); }
+	mLength = size;
+}
+
 void ARSequencerNode::initialize()
 {
 
+}
+
+void ARSequencerNode::getNextStep() {
+
+	bool r = ci::Rand::randBool();
+
+	switch (mDirection){
+		case Direction::up:
+			mCurrentStep += 1;
+			if (mCurrentStep >= mLength) mCurrentStep -= mLength;
+			break;
+		case Direction::down:
+			mCurrentStep -= 1;
+			if (mCurrentStep < 0) mCurrentStep += mLength;
+			break;
+		case Direction::updown:
+			break;
+		case Direction::walk:
+			if (r) {
+				mCurrentStep += 1;
+				if (mCurrentStep >= mLength) mCurrentStep -= mLength;
+			}
+			else {
+				mCurrentStep -= 1;
+				if (mCurrentStep < 0) mCurrentStep += mLength;
+			}
+			break;
+		case Direction::random:
+			mCurrentStep = ci::Rand::randFloat(mLength);
+			break;
+	}
 }
 
 void ARSequencerNode::process(ci::audio::Buffer * buffer)
@@ -31,8 +70,8 @@ void ARSequencerNode::process(ci::audio::Buffer * buffer)
 	const size_t bufferFrames = frameRange.second - frameRange.first;
 	float *bufferData = buffer->getData();
 
-	const float* threshData = nullptr;
-	if (mThreshold.eval()) threshData = mThreshold.getValueArray();
+	const float* posData = nullptr;
+	if (mPosition.eval()) posData = mPosition.getValueArray();
 
 	int readCount = 0;
 	
@@ -41,11 +80,19 @@ void ARSequencerNode::process(ci::audio::Buffer * buffer)
 		for (int ch = 0; ch < numChannels; ch++) {
 
 			size_t bufferLookup = ch * bufferFrames + readCount;
-			float trigger = mTrigDetect.process(bufferData[bufferLookup]);
+			float trigger = mTrigDetect.process(bufferData[bufferLookup], ch);
+			double time = ci::audio::master()->getNumProcessedSeconds();
+			if (trigger > 0) CI_LOG_D(readCount << " " <<time << " there was a trigger");
+			mTriggerCount += mTrigDetect.process(bufferData[bufferLookup],ch);
 
-			if( threshData ) bufferData[bufferLookup] = bufferData[bufferLookup] > threshData[readCount];
-			else bufferData[bufferLookup] = bufferData[bufferLookup] > mThreshold.getValue();
-			
+			if ((mTriggerCount % mClockDivisions)==0) {
+				mTriggerCount = 0;
+				if (posData) mCurrentStep = posData[readCount] * mLength;
+				else getNextStep();
+			}
+
+			//bufferData[bufferLookup] = mSequence[mCurrentStep];
+			bufferData[bufferLookup] = trigger;
 		}
 		readCount++;
 	}	
