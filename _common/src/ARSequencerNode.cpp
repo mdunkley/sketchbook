@@ -10,7 +10,8 @@ using namespace cinder::log;
 
 ARSequencerNode::ARSequencerNode(const Format & format) :
 	Node(format),
-	mThreshold(this)
+	mThreshold(this),
+	mPosition(this)
 {
 }
 
@@ -40,6 +41,8 @@ void ARSequencerNode::process(ci::audio::Buffer * buffer)
 		for (int ch = 0; ch < numChannels; ch++) {
 
 			size_t bufferLookup = ch * bufferFrames + readCount;
+			float trigger = mTrigDetect.process(bufferData[bufferLookup]);
+
 			if( threshData ) bufferData[bufferLookup] = bufferData[bufferLookup] > threshData[readCount];
 			else bufferData[bufferLookup] = bufferData[bufferLookup] > mThreshold.getValue();
 			

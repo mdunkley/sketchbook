@@ -1,5 +1,5 @@
 #include <cmath>
-#include "ClockNode.h"
+#include "ARClockNode.h"
 #include "cinder/CinderMath.h"
 #include "cinder/Log.h"
 #include "cinder/Rand.h"
@@ -10,30 +10,29 @@
 using namespace cinder::log;
 
 
-ClockNode::~ClockNode()
+ARClockNode::~ARClockNode()
 {
 }
 
-
-void ClockNode::initialize()
+void ARClockNode::initialize()
 {
-
 }
 
-
-
-void ClockNode::tick() {
+void ARClockNode::tick() {
 
 	mTimer = 0;
+
 	mNextTick = abs(mRate * mClockDivisions
 		+ (mRateJitter*cinder::Rand::randFloat(-1, 1)))
 		* ci::audio::master()->getSampleRate();
+
 	mDuty = abs(mDutyCycle + mDutyCycleJitter * cinder::Rand::randFloat(-1, 1));
+
 	mTickInc = 1.0 / mNextTick;
 
 }
 
-void ClockNode::process(ci::audio::Buffer *buffer)
+void ARClockNode::process(ci::audio::Buffer *buffer)
 {
 	const int numChannels = buffer->getNumChannels();
 	const auto &frameRange = getProcessFramesRange();
@@ -52,7 +51,9 @@ void ClockNode::process(ci::audio::Buffer *buffer)
 			float newValue = syncData[readCount];
 			float offset = newValue - mOldSyncValue;
 			if (offset < 0) mWaitingForRisingEdge = true;
+
 			if (mWaitingForRisingEdge && offset > 0) {
+
 				mWaitingForRisingEdge = false;
 				auto oldSyncTime = mSyncTime;
 				mSyncTime = ci::audio::master()->getNumProcessedSeconds();
@@ -73,14 +74,13 @@ void ClockNode::process(ci::audio::Buffer *buffer)
 		mTimer++;
 
 		float ramp = float(mTimer) / mNextTick;
+		
 		for (int ch = 0; ch < numChannels; ch++) {
+
 			size_t lookup = ch * numFrames + readCount;
-			if (mMode == OutputMode::gate) {
-				data[lookup] = ramp < mDuty;
-			}
-			else if (mMode == OutputMode::ramp) {
-				data[lookup] = ramp;
-			}
+
+			if (mMode == OutputMode::gate) {data[lookup] = ramp < mDuty;} 
+			else if (mMode == OutputMode::ramp) {data[lookup] = ramp;}
 		}
 
 		readCount++;

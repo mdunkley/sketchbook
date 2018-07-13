@@ -125,7 +125,10 @@
     <ClCompile Include="..\..\..\_common\src\ComparatorNode.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\_common\src\ClockNode.cpp">
+    <ClCompile Include="..\..\..\_common\src\ARClockNode.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\_common\src\ARSequencerNode.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>
@@ -205,7 +208,10 @@
     <ClInclude Include="..\..\..\_common\include\ComparatorNode.h">
       <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\_common\include\ClockNode.h">
+    <ClInclude Include="..\..\..\_common\include\ARClockNode.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_common\include\ARSequencerNode.h">
       <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>

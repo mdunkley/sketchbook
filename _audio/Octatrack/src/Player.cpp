@@ -15,7 +15,7 @@
 #include "cinder/audio/ChannelRouterNode.h"
 #include "EnvelopeFollowerNode.h"
 #include "ComparatorNode.h"
-#include "ClockNode.h"
+#include "ARClockNode.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -32,6 +32,7 @@ class PlayerApp : public App {
 	void setup() override;
 	void setupAudioDevice();
 	void setupOSC();
+	void fileDrop(FileDropEvent event) override;
 	void mouseUp(MouseEvent event) override;
 	void mouseDown( MouseEvent event ) override;
 	void mouseMove(MouseEvent event);
@@ -56,8 +57,8 @@ class PlayerApp : public App {
 	EnvelopeFollowerNodeRef mEnvelopeFollowerNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
-	ClockNodeRef mMasterClock;
-	ClockNodeRef mClockNode;
+	ARClockNodeRef mMasterClock;
+	ARClockNodeRef mClockNode;
 
 	Receiver mReceiver;
 
@@ -87,8 +88,8 @@ void PlayerApp::setup()
 	mEnvelopeFollowerNode = ctx->makeNode(new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
 	mEnvelopeFollowerNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
-	mClockNode = ctx->makeNode(new ClockNode());
-	mMasterClock = ctx->makeNode(new ClockNode());
+	mClockNode = ctx->makeNode(new ARClockNode());
+	mMasterClock = ctx->makeNode(new ARClockNode());
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
@@ -111,11 +112,6 @@ void PlayerApp::setup()
 	
 	mLfo = ctx->makeNode( new ci::audio::GenPhasorNode() );
 	mLfo->setFreq( ci::audio::master()->getSampleRate()/float(buffer->getNumFrames()) );
-	
-	//mPlayer->getPositionParam()->setProcessor( mLfo );
-
-	//mLfo->enable();
-
 
 	std::list<int> scale = { 0,5 };
 	mPlayer->setScale(scale);
@@ -125,19 +121,14 @@ void PlayerApp::setup()
 	mClockNode->enable();
 	mMasterClock >> mAverageMonitor;
 	mClockNode->setRate( 5 );
-	mClockNode->setMode( ClockNode::OutputMode::ramp );
+	mClockNode->setMode( ARClockNode::OutputMode::ramp );
 
 	mMasterClock->enable();
 	mMasterClock->setRate(.2);
 	mClockNode->getSyncParam()->setProcessor(mMasterClock);
 
 	mPlayer->getTriggerParam()->setProcessor(mClockNode);
-	//mClockNode->setRateJitter(.5);
-	//mClockNode->setDutyCycle(.1);
-	//mClockNode->setDutyCycleJitter(.1);
-	//mPlayer >> mEnvelopeFollowerNode >> mComparator >> mAverageMonitor;
 	mAverageMonitor->enable();
-
 	mRecorder->attachTo(mPlayer);
 	mRecorder->record(false);
 
@@ -220,6 +211,13 @@ void PlayerApp::setupOSC() {
 	});
 
 	
+}
+
+void PlayerApp::fileDrop(FileDropEvent event)
+{
+	for (auto& f : event.getFiles()) {
+		mRootBank->addBuffer(f);
+	}
 }
 
 void PlayerApp::mouseUp(MouseEvent event)

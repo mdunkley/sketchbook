@@ -3,6 +3,9 @@
 #include <array>
 #include <stdio.h>
 #include "cinder/audio/audio.h"
+#include "ARClockNode.h"
+#include <thread>
+#include "CommonUtils.h"
 
 using namespace cinder::audio;
 
@@ -24,7 +27,11 @@ protected:
 
 private:
 
+	//std::atomic<std::vector<float>> mValues;
+
+	AudioOp::TriggerDetect mTrigDetect;
 	ci::audio::Param mThreshold;
+	ci::audio::Param mPosition;
 
 };
 

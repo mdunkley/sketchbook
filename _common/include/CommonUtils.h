@@ -1,6 +1,8 @@
 #pragma once
 
 #include <list>
+#include <array>
+#include <stdio.h>
 #include "cinder/CinderMath.h"
 
 int wrap(int kX, int const kLowerBound, int const kUpperBound);
@@ -60,4 +62,23 @@ namespace cinder {
 			return(val1*(1 - mu2) + val2 * mu2);
 		}
 	}
+}
+
+namespace AudioOp {
+
+	class TriggerDetect {
+	public:
+		TriggerDetect() { mPrevValue.fill(0); }
+
+		float process(float value, int ch = 0, float thresh = .1f) { 
+			float tval = value > thresh;
+			float outValue = ci::clamp(mPrevValue[ch] - tval,0.0f,1.0f);
+			mPrevValue[ch] = tval;
+			return tval;
+		}
+
+	private:
+		std::array<float,32> mPrevValue;
+
+	};
 }
