@@ -4,6 +4,10 @@
 #include <array>
 #include <stdio.h>
 #include "cinder/CinderMath.h"
+#include "cinder/audio/audio.h"
+#include "cinder/Log.h"
+
+using namespace cinder::log;
 
 int wrap(int kX, int const kLowerBound, int const kUpperBound);
 
@@ -66,18 +70,111 @@ namespace cinder {
 
 namespace AudioOp {
 
-	class TriggerDetect {
+	class Delay {
+
 	public:
 
-		float process(float value, int ch = 0, float thresh = .1f) { 
-			float tval = value > thresh;
-			float outValue = ci::clamp(mPrevValue - tval,0.0f,1.0f);
-			mPrevValue = tval;
-			return outValue;
+		//float operator()(float fl) { ; }
+		float process(float invalue, size_t delaysamples) {
+			int totaldelay = std::min(delaysamples, mMaxDelayLength);
+			mDelay[mWriteHead] = invalue;
+			mReadHead = mWriteHead - delaysamples;
+			if (mReadHead < 0) mReadHead += mMaxDelayLength;
+			if ((++mWriteHead) >= mMaxDelayLength) mWriteHead = 0;
+			return mDelay[mReadHead];
 		}
 
 	private:
-		float mPrevValue;
 
+		static const size_t mMaxDelayLength = 65536;
+		long mReadHead = 0;
+		long mWriteHead = 0;
+		std::array<float, mMaxDelayLength> mDelay;
+
+	};
+
+	class History {
+	public:
+		float process(float value) {
+			float outvalue = mPreviousValue;
+			mPreviousValue = value;
+			return mPreviousValue;
+		}
+	private:
+		float mPreviousValue = 0;
+	};
+
+	class Delta {
+	public:
+		float process(float value) {
+			float outvalue = value - mPreviousValue;
+			mPreviousValue = value;
+			return outvalue;
+		}
+	private:
+		float mPreviousValue = 0;
+	};
+
+	class Change {
+	public:
+		float process(float value) {
+			float outvalue = 0;
+			if (value > mPreviousValue) outvalue = 1;
+			else if (value < mPreviousValue) outvalue = -1;
+			mPreviousValue = value;
+			return outvalue;
+		}
+	private:
+		float mPreviousValue = 0;
+	};
+
+	class RisingEdgeDetector {
+	public:
+
+		enum class State { wait, arm, active };
+
+		float process(float value, float gatelength = 0) {
+
+			float outvalue = 0;
+			
+			if (mState == State::wait) {
+				if (value < mPrevValue) mState = State::arm;
+			}
+			else if (mState == State::arm) {
+				if (value > mPrevValue) {
+					mState = State::active;
+					mEnvInc = 1 / gatelength;
+					mTimer = 0;
+				}
+			}
+			else if (mState == State::active) {
+				if (gatelength > 0) {
+					outvalue = 1;
+					mTimer += mEnvInc;
+					if (mTimer >= 1) {
+						//CI_LOG_I(ci::audio::master()->getNumProcessedSeconds());
+						mTimer = 1;
+						State::wait;
+					}
+				} else {
+					float newTimer = ci::audio::master()->getNumProcessedSeconds();
+					//CI_LOG_I(newTimer - mPrevTimer << " " << mPrevTimer << " ";);
+					mPrevTimer = newTimer;
+					outvalue = 1;
+					mState = State::wait;
+				}
+			}
+
+			mPrevValue = value;
+			return outvalue;
+		}
+
+	private:
+
+		State mState = State::wait;
+		double mEnvInc;
+		double mTimer;
+		float mPrevValue;
+		double mPrevTimer = 0;
 	};
 }

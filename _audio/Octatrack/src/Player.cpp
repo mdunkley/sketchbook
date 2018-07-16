@@ -60,7 +60,6 @@ class PlayerApp : public App {
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
 	ARClockNodeRef mMasterClock;
-	ARClockNodeRef mClockNode;
 	
 
 	Receiver mReceiver;
@@ -91,7 +90,7 @@ void PlayerApp::setup()
 	mEnvelopeFollowerNode = ctx->makeNode(new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
 	mEnvelopeFollowerNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
-	mClockNode = ctx->makeNode(new ARClockNode());
+
 	mMasterClock = ctx->makeNode(new ARClockNode());
 	mSeq = ctx->makeNode(new ARSequencerNode());
 
@@ -122,23 +121,21 @@ void PlayerApp::setup()
 	mPlayer->enable();
 	mPlayer->setVolume(1);
 
-	mClockNode->enable();
 	mSeq >> mAverageMonitor;
-	std::vector<float> sequence = { 1,0,0,1,0 };
+	std::vector<float> sequence = { 1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0 };
 	mSeq->setSequence(sequence);
 
-	mClockNode->setRate( 5 );
-	mClockNode->setMode( ARClockNode::OutputMode::ramp );
-
 	mMasterClock->enable();
-	mMasterClock->setRate(.2);
-	mClockNode->getSyncParam()->setProcessor(mMasterClock);
-	mClockNode >> mSeq;
+	mMasterClock->setRate(0.21);
+	mMasterClock >> mSeq;
+
+	mSeq->setDelaySize(10*ctx->getSampleRate());
 
 	mPlayer->getTriggerParam()->setProcessor(mSeq);
 	mAverageMonitor->enable();
-	mRecorder->attachTo(mPlayer);
-	mRecorder->record(false);
+	mRecorder->attachTo( mPlayer );
+	mRecorder->record( false );
+
 
 	ctx->enable();
 
@@ -283,7 +280,7 @@ void PlayerApp::update()
 {
 	//mClock->update();
 	inspector();
-	mPlayer->setLength(mClockNode->getRate());
+	//mPlayer->setLength(mClockNode->getRate());
 	//console() << mPlayer->getNumActiveGrains() << std::endl;
 }
 
@@ -328,6 +325,11 @@ bool PlayerApp::inspector()
 		bool record = mRecorder->isRecording();
 		if (ui::Checkbox("Record", &record)) {
 			mRecorder->record(record);
+		}
+
+		int samples = mSeq->getDelaySize();
+		if (ui::DragInt("Delay Size", &samples, 100, 10 * ci::audio::master()->getSampleRate())) {
+			mSeq->setDelaySize(samples);
 		}
 
 		

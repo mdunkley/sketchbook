@@ -6,6 +6,7 @@
 #include "ARClockNode.h"
 #include <thread>
 #include "CommonUtils.h"
+#include "Circuits.h"
 
 using namespace cinder::audio;
 
@@ -28,6 +29,10 @@ public:
 	void setClockDivision(size_t divs) { mClockDivisions = std::max((size_t)1,divs); }
 	size_t getClockDivision() const { return mClockDivisions; }
 
+	void setDelaySize(size_t samples);
+	size_t getDelaySize() { return mDelaySize; }
+	
+
 	void setSequence(std::vector<float> values);
 
 	enum class Direction { up, down, updown, walk, random };
@@ -46,9 +51,13 @@ private:
 	std::atomic<int> mLength = 1;
 	std::atomic<int> mCurrentStep = 0;
 
-	AudioOp::TriggerDetect mTrigDetect;
+	Circuits::DelayRef mSigDelay;
+	Circuits::RisingEdgeTrigger mTrigDetect;
+	Circuits::Change mChange;
+
 	size_t mTriggerCount = 0;
 	size_t mClockDivisions = 1;
+	size_t mDelaySize = 0;
 
 	ci::audio::Param mPosition;
 
