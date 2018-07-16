@@ -22,6 +22,7 @@ int closest(int value, const std::list<int> & vec)
 
 	std::list<int>::const_reverse_iterator cri =
 		std::lower_bound(vec.rbegin(), vec.rend(), value, ClosestCmp());
+
 	if (cri != vec.rend()) {
 
 		return *cri;

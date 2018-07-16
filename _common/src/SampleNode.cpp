@@ -5,6 +5,7 @@
 #include "cinder/Log.h"
 #include "cinder/Rand.h"
 #include "CommonUtils.h"
+#include "circuits.h"
 
 using namespace ci;
 using namespace std;

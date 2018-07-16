@@ -5,15 +5,20 @@
 #include "cinder/Rand.h"
 #include "cinder/audio/Buffer.h"
 #include "CommonUtils.h"
+#include "Circuits.h"
 
 
 using namespace cinder::log;
 
 ARSequencerNode::ARSequencerNode(const Format & format) :
 	Node(format),
-	mPosition(this)
+	mPosition(this),
+	mSigDelay()
 {
+
+	mSigDelay = std::make_shared<Circuits::Delay>();
 	mSequence.fill(0);
+	mSigDelay->setDelaySize(ci::audio::master()->getSampleRate());
 }
 
 ARSequencerNode::~ARSequencerNode()
@@ -32,21 +37,30 @@ void ARSequencerNode::initialize()
 
 }
 
+void ARSequencerNode::setDelaySize(size_t delaysize) {
+	mSigDelay->setDelaySize(delaysize);
+	mDelaySize = delaysize;
+}
+
 void ARSequencerNode::getNextStep() {
 
 	bool r = ci::Rand::randBool();
 
 	switch (mDirection){
+
 		case Direction::up:
 			mCurrentStep += 1;
 			if (mCurrentStep >= mLength) mCurrentStep -= mLength;
 			break;
+
 		case Direction::down:
 			mCurrentStep -= 1;
 			if (mCurrentStep < 0) mCurrentStep += mLength;
 			break;
+
 		case Direction::updown:
 			break;
+
 		case Direction::walk:
 			if (r) {
 				mCurrentStep += 1;
@@ -57,6 +71,7 @@ void ARSequencerNode::getNextStep() {
 				if (mCurrentStep < 0) mCurrentStep += mLength;
 			}
 			break;
+
 		case Direction::random:
 			mCurrentStep = ci::Rand::randFloat(mLength);
 			break;
@@ -77,23 +92,20 @@ void ARSequencerNode::process(ci::audio::Buffer * buffer)
 	
 	while (readCount < bufferFrames) {
 
-		for (int ch = 0; ch < numChannels; ch++) {
+		size_t bufferLookup = readCount;
+		float value = bufferData[bufferLookup];
+		float trigger = mChange.process(mTrigDetect.process(value))>0;
+		mTriggerCount += trigger;
 
-			size_t bufferLookup = ch * bufferFrames + readCount;
-			float trigger = mTrigDetect.process(bufferData[bufferLookup], ch);
-			double time = ci::audio::master()->getNumProcessedSeconds();
-			if (trigger > 0) CI_LOG_D(readCount << " " <<time << " there was a trigger");
-			mTriggerCount += mTrigDetect.process(bufferData[bufferLookup],ch);
-
-			if ((mTriggerCount % mClockDivisions)==0) {
-				mTriggerCount = 0;
-				if (posData) mCurrentStep = posData[readCount] * mLength;
-				else getNextStep();
-			}
-
-			//bufferData[bufferLookup] = mSequence[mCurrentStep];
-			bufferData[bufferLookup] = trigger;
+		if (mTriggerCount>=mClockDivisions) {
+			mTriggerCount = 0;
+			if (posData) mCurrentStep = std::floor(posData[readCount] * mLength);
+			else getNextStep();
 		}
+
+		bufferData[bufferLookup] = mSigDelay->process( mSequence[mCurrentStep] );
+		//bufferData[bufferLookup] = mSequence[mCurrentStep];
+
 		readCount++;
-	}	
+	}
 }
