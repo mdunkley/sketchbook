@@ -96,4 +96,17 @@ namespace Circuits {
 		float mPrevValue;
 		double mPrevTimer = 0;
 	};
+
+	class AREnvelope {
+	public:
+		float operator()(float triggerSig);
+		enum class State { wait, attack, decay };
+	private:
+		float mValue = 0;
+		State mState = State::wait;
+		float mAttackLength = 1024;
+		float mDecayLength = 1024;
+		double mInc = 0;
+
+	};
 }

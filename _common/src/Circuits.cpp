@@ -103,4 +103,29 @@ namespace Circuits {
 		mPrevValue = value;
 		return outvalue;
 	}
-}
+	float AREnvelope::operator()(float triggerSig)
+	{
+		int trigger = triggerSig > .025;
+		if (mState == State::wait) {
+			mValue = 0;
+			if (trigger) {
+				mInc = 1.0 / mAttackLength;
+				mState = State::attack;
+			}
+		}
+		else if (mState == State::attack) {
+			mValue += mInc;
+			if (mValue >= 1) {
+				mValue = 1;
+				mInc = -1.0 / mDecayLength;
+				mState = State::decay;
+			}
+		}
+		else if (mState == State::decay) {
+			mValue += mInc;
+			if (mValue <= 0) {
+				mInc = 0;
+				mState = State::wait;
+			}
+		}
+	}
