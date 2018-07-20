@@ -19,6 +19,7 @@ ARSequencerNode::ARSequencerNode(const Format & format) :
 	mSigDelay = std::make_shared<Circuits::Delay>();
 	mSequence.fill(0);
 	mSigDelay->setDelaySize(ci::audio::master()->getSampleRate());
+	mSigDelay->setDelaySize(10);
 }
 
 ARSequencerNode::~ARSequencerNode()

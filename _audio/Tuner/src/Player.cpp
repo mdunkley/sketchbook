@@ -10,7 +10,7 @@
 #include "AudioDrawUtils.h"
 #include "EnvelopeFollowerNode.h"
 #include "ComparatorNode.h"
-#include "ClockNode.h"
+#include "ARClockNode.h"
 #include "TunerNode.h"
 
 using namespace ci;

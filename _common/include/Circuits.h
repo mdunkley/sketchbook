@@ -98,10 +98,21 @@ namespace Circuits {
 	};
 
 	class AREnvelope {
+
 	public:
+		
 		float operator()(float triggerSig);
+		float operator()(float triggerSig, float attack, float decay);
 		enum class State { wait, attack, decay };
+
+		void setAttack(size_t size) { mAttackLength = size; }
+		size_t getAttack() const { return mAttackLength; }
+
+		void setDecay(size_t size) { mDecayLength = size; }
+		size_t getDecay() const { return mDecayLength; }
+
 	private:
+
 		float mValue = 0;
 		State mState = State::wait;
 		float mAttackLength = 1024;

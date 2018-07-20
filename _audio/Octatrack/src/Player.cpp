@@ -60,6 +60,7 @@ class PlayerApp : public App {
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
 	ARClockNodeRef mMasterClock;
+	ARSequencerNodeRef mPitchSeq;
 	
 
 	Receiver mReceiver;
@@ -93,6 +94,7 @@ void PlayerApp::setup()
 
 	mMasterClock = ctx->makeNode(new ARClockNode());
 	mSeq = ctx->makeNode(new ARSequencerNode());
+	mPitchSeq = ctx->makeNode(new ARSequencerNode());
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
@@ -124,14 +126,19 @@ void PlayerApp::setup()
 	mSeq >> mAverageMonitor;
 	std::vector<float> sequence = { 1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0 };
 	mSeq->setSequence(sequence);
+	std::vector<float> pitchseq = { .1f,0.0f,.36f,.8f,.5f };
+	mPitchSeq->setSequence(pitchseq);
 
+	mMasterClock >> mPitchSeq;
+	mPitchSeq->setClockDivision(3);
 	mMasterClock->enable();
 	mMasterClock->setRate(0.21);
 	mMasterClock >> mSeq;
 
-	mSeq->setDelaySize(10*ctx->getSampleRate());
+	mSeq->setDelaySize(.01*ctx->getSampleRate());
 
 	mPlayer->getTriggerParam()->setProcessor(mSeq);
+	mPlayer->getPositionParam()->setProcessor(mPitchSeq);
 	mAverageMonitor->enable();
 	mRecorder->attachTo( mPlayer );
 	mRecorder->record( false );

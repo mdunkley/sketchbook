@@ -11,17 +11,16 @@ namespace Circuits {
 		return mValue;
 	}
 
-
 	// DELAY
 
-	Delay::Delay() 
+	Delay::Delay()
 	{
 		setDelaySize(mDelayMax);
 	}
 
 	Delay::~Delay() {
 	}
-	
+
 	void Delay::setDelaySize(size_t samples) {
 
 		size_t value = std::max(samples, (size_t)0);
@@ -44,19 +43,21 @@ namespace Circuits {
 	}
 
 	float Delay::process(float invalue) {
-
+		size_t delayLineSize = mDelayLine.size();
 		//CI_LOG_I(invalue << " " << mReadHead << " " << mDelayLine.size() << " " << mDelaySize);
-		if (mDelayLine.size() > 0) {
-			mDelayLine.at(mWriteHead) = invalue;
-			mReadHead = wrap(mWriteHead - std::min(mDelaySize, mDelayMax - 1), 0, mDelayMax);
-			mWriteHead++;
-			if (mWriteHead >= mDelayMax) mWriteHead = 0;
+		if (delayLineSize > 0) {
 
-			//CI_LOG_I(mReadHead<<" "<<mDelayMax<<" "<<mDelayLine.size());
-			return mDelayLine.at(mReadHead);
+			mWriteHead = wrap( mWriteHead, 0, delayLineSize-1 );
+			mDelayLine[ mWriteHead ] = invalue;
+			mReadHead = wrap( mWriteHead - std::min( mDelaySize, delayLineSize - 1), 0, delayLineSize - 1);
+			mWriteHead++;
+
+			return mDelayLine.at( mReadHead );
 		}
 		else {
+
 			return invalue;
+
 		}
 
 	}
@@ -103,6 +104,7 @@ namespace Circuits {
 		mPrevValue = value;
 		return outvalue;
 	}
+
 	float AREnvelope::operator()(float triggerSig)
 	{
 		int trigger = triggerSig > .025;
@@ -124,8 +126,20 @@ namespace Circuits {
 		else if (mState == State::decay) {
 			mValue += mInc;
 			if (mValue <= 0) {
+				mValue = 0;
 				mInc = 0;
 				mState = State::wait;
 			}
 		}
+		return mValue;
 	}
+
+
+	float AREnvelope::operator()(float triggerSig, float attack, float decay)
+	{
+		mAttackLength = attack;
+		mDecayLength = decay;
+		return (*this)(triggerSig);
+	}
+}
+
