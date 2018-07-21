@@ -106,12 +106,12 @@ void SampleNode::setBuffer(ci::audio::BufferRef buffer)
 	ci::app::console() << "New bufer is " << buffer->getNumFrames() << " samples long" << std::endl;
 }
 
-void SampleNode::calcEnvelope(SampleEnvelopeType type)
+void SampleNode::calcEnvelope(SampleEnvelopeType type, float modifier)
 {
 	mEnvelope = make_shared<ci::audio::BufferDynamic>();
-	mEnvelope->setSize(1024,1);
-
+	mEnvelope->setSize(1024, 1);
 	size_t envelopeSize = mEnvelope->getNumFrames();
+	float incr = 1.0 / envelopeSize;
 	float *data = mEnvelope->getData();
 
 	switch (type)
@@ -126,7 +126,7 @@ void SampleNode::calcEnvelope(SampleEnvelopeType type)
 	case SampleEnvelopeType::hann:
 
 		for (int i = 0; i < envelopeSize; i++) {
-			data[i] = .5 - (.5 * cos(2 * M_PI* float(i) / (envelopeSize -1)));
+			data[i] = .5 - (.5 * cos(2 * M_PI* float(i) / (envelopeSize - 1)));
 		}
 		break;
 
@@ -136,7 +136,23 @@ void SampleNode::calcEnvelope(SampleEnvelopeType type)
 			data[i] = .54 - (.46 * cos(2 * M_PI* float(i) / (envelopeSize - 1)));
 		}
 		break;
+
+	case SampleEnvelopeType::rampIn:
+
+		for (int i = 0; i < envelopeSize; i++) {
+			data[i] = i * incr;
+		}
+		break;
+
+	case SampleEnvelopeType::rampOut:
+
+		for (int i = 0; i < envelopeSize; i++) {
+			data[i] = 1.0-(i * incr);
+		}
+		break;
 	}
+
+
 }
 
 void SampleNode::setScale(std::list<int> scale)

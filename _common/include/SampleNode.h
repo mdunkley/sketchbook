@@ -57,14 +57,14 @@ public:
 	SampleNode(const Format &format = Format()) : 
 		Node(format), mPosition(this), mTriggerInput(this), mGateInput(this) {}
 
-	enum class SampleEnvelopeType { constant, hann, hamming };
+	enum class SampleEnvelopeType { constant, hann, hamming, rampIn, rampOut };
 
 	ci::audio::Param* getGateParam() { return &mGateInput; }
 	ci::audio::Param* getTriggerParam() { return &mTriggerInput; }
 	ci::audio::Param* getPositionParam() { return &mPosition; }
 
 	void setBuffer(ci::audio::BufferRef buffer);
-	void calcEnvelope(SampleEnvelopeType type);
+	void calcEnvelope(SampleEnvelopeType type, float modifier = 1.0);
 	void calcPanLookup();
 	void calcNoteLookup();
 

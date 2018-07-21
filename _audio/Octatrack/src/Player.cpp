@@ -126,7 +126,7 @@ void PlayerApp::setup()
 	mSeq >> mAverageMonitor;
 	std::vector<float> sequence = { 1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0 };
 	mSeq->setSequence(sequence);
-	std::vector<float> pitchseq = { .1f,0.0f,.36f,.8f,.5f };
+	std::vector<float> pitchseq = { .1f,0.0f,.36f,.8f,.5f,.7f };
 	mPitchSeq->setSequence(pitchseq);
 
 	mMasterClock >> mPitchSeq;
