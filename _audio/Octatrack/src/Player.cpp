@@ -116,14 +116,16 @@ void PlayerApp::setup()
 	mRecorder = mAudioManager->getAudioRecorder();
 	
 	mLfo = ctx->makeNode( new ci::audio::GenPhasorNode() );
-	mLfo->setFreq( ci::audio::master()->getSampleRate()/float(buffer->getNumFrames()) );
+	mLfo->setFreq( -1 );
+	//mPlayer->getRateParam()->setProcessor(mLfo);
+	mLfo->enable();
 
 	std::list<int> scale = { 0,5 };
 	mPlayer->setScale(scale);
 	mPlayer->enable();
 	mPlayer->setVolume(1);
 
-	mSeq >> mAverageMonitor;
+	mLfo >> mAverageMonitor;
 	std::vector<float> sequence = { 1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0 };
 	mSeq->setSequence(sequence);
 	std::vector<float> pitchseq = { .1f,0.0f,.36f,.8f,.5f,.7f };

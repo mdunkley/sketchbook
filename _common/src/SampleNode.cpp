@@ -19,7 +19,8 @@ SampleGrain::~SampleGrain()
 }
 
 void SampleGrain::update() {
-	position += rate;
+
+	position += rate + rateMod;
 
 	age++;
 	if (age >= life) {
@@ -187,12 +188,11 @@ void SampleNode::initializeSample(SampleGrain* sample)
 	else
 		sample->position = size_t( abs(mPosition.getValue() * bufferLength + 
 			mPositionJitter * Rand::randFloat(-1, 1) * sampleRate));
-
-	if (mRateValues != nullptr)
-		sample->rate = (mRateValues[mProcessReadCount] + 
-			mRateJitter * Rand::randFloat(-1, 1)) * transRatio;
-	else
-		sample->rate = (mRate + mRateJitter * Rand::randFloat(-1, 1)) * transRatio;
+	
+	if (mRateValues != nullptr)	sample->rateMod = mRateValues[mProcessReadCount];
+	else sample->rateMod = 0;
+	
+	sample->rate = (mRate + mRateJitter * Rand::randFloat(-1, 1)) * transRatio;
 
 	sample->age = 0;
 	sample->life = size_t(abs(mLength + mLengthJitter * Rand::randFloat(-1, 1))*sampleRate);
@@ -234,8 +234,9 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 		mPositionValues = mPosition.getValueArray();
 
 	mRateValues = nullptr;
-	if (mRateInput.eval())
+	if (mRateInput.eval()) {
 		mRateValues = mRateInput.getValueArray();
+	}
 
 	float const *triggerData = nullptr;
 	if (mTriggerInput.eval())
@@ -244,6 +245,9 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 	float const *gateData = nullptr;
 	if (mGateInput.eval())
 		gateData = mGateInput.getValueArray();
+
+	if (mRateInput.eval())
+		mRateValues = mRateInput.getValueArray();
 
 	int readCount = 0;
 	int foundVoices = 0;
@@ -265,6 +269,13 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 			mOldTriggerValue = newValue;
 		}
 
+		float rateMod = 0;
+		if (mRateValues) {
+			rateMod = mRateValues[readCount];
+			//CI_LOG_I(rateMod);
+		}
+			
+
 		if (gateData) {
 			int gateValue = gateData[readCount] > 0;
 			mGate = gateValue;
@@ -282,6 +293,9 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 			// If Sample is running
 			if (sample->active) {
 				
+				// Audio rate pitch info
+				sample->rateMod = rateMod;
+
 				// Sample the envelope once
 				float envelope = sample->getEnvelope();
 				

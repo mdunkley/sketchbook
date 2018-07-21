@@ -34,6 +34,7 @@ public:
 	float	pan = .5f;
 	float	volume = 1.0f;
 	float	rate = 1.0f;
+	float	rateMod = 0.0f;
 	size_t	age = 0;
 	size_t	life;
 
@@ -148,7 +149,9 @@ private:
 	ci::audio::Param mTriggerInput;
 	float mOldTriggerValue = 0.0;
 	bool mWaitingForTriggerEdge = false;
+
 	ci::audio::Param mGateInput;
+
 	ci::audio::Param mRateInput;
 	const float *mRateValues = nullptr;
 	ci::audio::Param mPosition;
