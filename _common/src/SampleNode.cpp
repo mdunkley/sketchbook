@@ -51,7 +51,6 @@ float SampleGrain::getEnvelope() {
 
 void SampleNode::initialize()
 {
-
 	// Calc envelope lookup
 	calcEnvelope(SampleEnvelopeType::constant);
 	calcPanLookup();
@@ -137,14 +136,14 @@ void SampleNode::calcEnvelope(SampleEnvelopeType type, float modifier)
 		}
 		break;
 
-	case SampleEnvelopeType::rampIn:
+	case SampleEnvelopeType::rampUp:
 
 		for (int i = 0; i < envelopeSize; i++) {
 			data[i] = i * incr;
 		}
 		break;
 
-	case SampleEnvelopeType::rampOut:
+	case SampleEnvelopeType::rampDown:
 
 		for (int i = 0; i < envelopeSize; i++) {
 			data[i] = 1.0-(i * incr);
@@ -183,17 +182,23 @@ void SampleNode::initializeSample(SampleGrain* sample)
 
 	if (mPositionValues != nullptr) 
 		sample->position = size_t(abs(
-			wrap(mPositionValues[mProcessReadCount] * bufferLength, 0, bufferLength) + 
-			mPositionJitter * Rand::randFloat(-1, 1)*sampleRate));
+			wrap( mPositionValues[mProcessReadCount] * bufferLength, 0, bufferLength ) + 
+			mPositionJitter * Rand::randFloat(-1, 1) * sampleRate));
 	else
-		sample->position = size_t(abs(mPosition.getValue()*bufferLength + 
-			mPositionJitter * Rand::randFloat(-1, 1)*sampleRate));
+		sample->position = size_t( abs(mPosition.getValue() * bufferLength + 
+			mPositionJitter * Rand::randFloat(-1, 1) * sampleRate));
+
+	if (mRateValues != nullptr)
+		sample->rate = (mRateValues[mProcessReadCount] + 
+			mRateJitter * Rand::randFloat(-1, 1)) * transRatio;
+	else
+		sample->rate = (mRate + mRateJitter * Rand::randFloat(-1, 1)) * transRatio;
 
 	sample->age = 0;
 	sample->life = size_t(abs(mLength + mLengthJitter * Rand::randFloat(-1, 1))*sampleRate);
 	sample->rampLength = std::min(mRamp * sampleRate,(float)sample->life*.5f);
 	sample->rampInc = 1.0 / sample->rampLength;
-	sample->rate = (mRate + mRateJitter * Rand::randFloat(-1, 1)) * transRatio;
+
 	sample->volume = mVolume + mVolumeJitter * Rand::randFloat(-1, 1);
 	sample->pan = ci::clamp(mPan + mPanJitter * Rand::randFloat(-1, 1), 0.0f, 1.0f);
 	sample->setBuffer(mBuffer);
@@ -228,6 +233,10 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 	if (mPosition.eval()) 
 		mPositionValues = mPosition.getValueArray();
 
+	mRateValues = nullptr;
+	if (mRateInput.eval())
+		mRateValues = mRateInput.getValueArray();
+
 	float const *triggerData = nullptr;
 	if (mTriggerInput.eval())
 		triggerData = mTriggerInput.getValueArray();
@@ -245,6 +254,7 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 
 		// Audio Rate trigger setup
 		if (triggerData) {
+
 			float newValue = triggerData[readCount];
 			float offset = newValue - mOldTriggerValue;
 			if (offset < 0) mWaitingForTriggerEdge = true;

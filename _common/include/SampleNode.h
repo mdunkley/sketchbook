@@ -55,39 +55,40 @@ class SampleNode : public ci::audio::Node {
 public:
 
 	SampleNode(const Format &format = Format()) : 
-		Node(format), mPosition(this), mTriggerInput(this), mGateInput(this) {}
+		Node(format), mPosition(this), mTriggerInput(this), mGateInput(this), mRateInput(this) {}
 
-	enum class SampleEnvelopeType { constant, hann, hamming, rampIn, rampOut };
+	enum class SampleEnvelopeType { constant, hann, hamming, rampUp, rampDown };
 
 	ci::audio::Param* getGateParam() { return &mGateInput; }
 	ci::audio::Param* getTriggerParam() { return &mTriggerInput; }
 	ci::audio::Param* getPositionParam() { return &mPosition; }
+	ci::audio::Param* getRateParam() { return &mRateInput; }
 
-	void setBuffer(ci::audio::BufferRef buffer);
-	void calcEnvelope(SampleEnvelopeType type, float modifier = 1.0);
-	void calcPanLookup();
-	void calcNoteLookup();
+	void	setBuffer(ci::audio::BufferRef buffer);
+	void	calcEnvelope(SampleEnvelopeType type, float modifier = 1.0);
+	void	calcPanLookup();
+	void	calcNoteLookup();
 
-	void setTriggerSpeed(float speed) { mTriggerRate = speed; }
-	float getTriggerSpeed() const { return mTriggerRate; }
-	void setTriggerSpeedJitter(float jitter) { mTriggerRateJitter = jitter; }
-	float getTriggerSpeedJitter() const { return mTriggerRateJitter; }
+	void	setTriggerSpeed(float speed) { mTriggerRate = speed; }
+	float	getTriggerSpeed() const { return mTriggerRate; }
+	void	setTriggerSpeedJitter(float jitter) { mTriggerRateJitter = jitter; }
+	float	getTriggerSpeedJitter() const { return mTriggerRateJitter; }
 
-	void setPosition(float phase) { mPosition.setValue( phase ); }
-	float getPosition() const { return mPosition.getValue(); }
-	void setPositionJitter(float jitter) { mPositionJitter = jitter; }
-	float getPositionJitter() const { return mPositionJitter; }
+	void	setPosition(float phase) { mPosition.setValue( phase ); }
+	float	getPosition() const { return mPosition.getValue(); }
+	void	setPositionJitter(float jitter) { mPositionJitter = jitter; }
+	float	getPositionJitter() const { return mPositionJitter; }
 
-	void setRamp(float length) { mRamp = length; }
-	float getRamp() const { return mRamp; }
+	void	setRamp(float length) { mRamp = length; }
+	float	getRamp() const { return mRamp; }
 
-	void setInterval(float interval) { mInterval = interval; }
-	float getInterval() const { return mInterval; }
-	void setIntervalJitter(float jitter) { mIntervalJitter = jitter; }
-	float getIntervalJitter() const { return mIntervalJitter; }
+	void	setInterval(float interval) { mInterval = interval; }
+	float	getInterval() const { return mInterval; }
+	void	setIntervalJitter(float jitter) { mIntervalJitter = jitter; }
+	float	getIntervalJitter() const { return mIntervalJitter; }
 
-	void setRate(float rate) { mRate = rate; }
-	float getRate() const { return mRate; }
+	void	setRate(float rate) { mRate = rate; }
+	float	getRate() const { return mRate; }
 	void	setRateJitter(float jitter) { mRateJitter = jitter; }
 	float	getRateJitter() const { return mRateJitter; }
 
@@ -147,14 +148,13 @@ private:
 	ci::audio::Param mTriggerInput;
 	float mOldTriggerValue = 0.0;
 	bool mWaitingForTriggerEdge = false;
-
 	ci::audio::Param mGateInput;
-
+	ci::audio::Param mRateInput;
+	const float *mRateValues = nullptr;
 	ci::audio::Param mPosition;
 	const float *mPositionValues = nullptr;
 
 	float mRamp = .002f;
-
 	float mTriggerRate = .01f;
 	float mTriggerRateJitter = 0.0f;
 	float mPositionJitter = 0.0f;
