@@ -56,7 +56,7 @@ class PlayerApp : public App {
 	ci::audio::MonitorNodeRef	mInputMonitor;
 	ci::audio::ChannelRouterNodeRef mChannelRouter;
 	ci::audio::ChannelRouterNodeRef mRecRouter;
-	EnvelopeFollowerNodeRef mEnvelopeFollowerNode;
+	EnvelopeFollowerNodeRef mEnvFolNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
 	ARClockNodeRef mMasterClock;
@@ -88,8 +88,8 @@ void PlayerApp::setup()
 	mInputMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 	mAverageMonitor = ctx->makeNode(new ci::audio::MonitorNode());
 	mChannelRouter = ctx->makeNode(new ci::audio::ChannelRouterNode());
-	mEnvelopeFollowerNode = ctx->makeNode(new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
-	mEnvelopeFollowerNode->setMultiplier(5);
+	mEnvFolNode = ctx->makeNode(new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
+	mEnvFolNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
 
 	mMasterClock = ctx->makeNode(new ARClockNode());
@@ -116,8 +116,8 @@ void PlayerApp::setup()
 	mRecorder = mAudioManager->getAudioRecorder();
 	
 	mLfo = ctx->makeNode( new ci::audio::GenPhasorNode() );
-	mLfo->setFreq( -1 );
-	//mPlayer->getRateParam()->setProcessor(mLfo);
+	mLfo->setFreq( -20 );
+	mPlayer->getRateParam()->setProcessor(mLfo);
 	mLfo->enable();
 
 	std::list<int> scale = { 0,5 };
@@ -137,7 +137,7 @@ void PlayerApp::setup()
 	mMasterClock->setRate(0.21);
 	mMasterClock >> mSeq;
 
-	mSeq->setDelaySize(.01*ctx->getSampleRate());
+	mSeq->setDelaySize(.001*ctx->getSampleRate());
 
 	mPlayer->getTriggerParam()->setProcessor(mSeq);
 	mPlayer->getPositionParam()->setProcessor(mPitchSeq);
@@ -341,6 +341,11 @@ bool PlayerApp::inspector()
 			mSeq->setDelaySize(samples);
 		}
 
+		float speed = mLfo->getFreq();
+		if (ui::DragFloat("LFO Freq", &speed, .001, -10, 10)) {
+			mLfo->setFreq(speed);
+		}
+
 		
 
 	}
@@ -351,8 +356,8 @@ void PlayerApp::draw()
 {
 	gl::clear( Color( 0, 0, 0 ) );
 	
-	if (mEnvelopeFollowerNode &&
-		mEnvelopeFollowerNode->getNumChannels() > 0 &&
+	if (mEnvFolNode &&
+		mEnvFolNode->getNumChannels() > 0 &&
 		mAverageMonitor &&
 		mAverageMonitor->getNumConnectedInputs()) {
 		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 100);

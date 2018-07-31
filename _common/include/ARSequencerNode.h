@@ -26,6 +26,8 @@ public:
 	ARSequencerNode(const Format &format = Format());
 	~ARSequencerNode();
 
+	void draw();
+
 	void setClockDivision(size_t divs) { mClockDivisions = std::max((size_t)1,divs); }
 	size_t getClockDivision() const { return mClockDivisions; }
 

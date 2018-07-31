@@ -6,6 +6,7 @@
 #include "cinder/audio/Buffer.h"
 #include "CommonUtils.h"
 #include "Circuits.h"
+#include "cinder/gl/gl.h"
 
 
 using namespace cinder::log;
@@ -23,6 +24,10 @@ ARSequencerNode::ARSequencerNode(const Format & format) :
 }
 
 ARSequencerNode::~ARSequencerNode()
+{
+}
+
+void ARSequencerNode::draw()
 {
 }
 
