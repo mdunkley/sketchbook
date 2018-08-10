@@ -3,28 +3,28 @@
 #include <array>
 #include <stdio.h>
 #include "cinder/audio/audio.h"
-#include "ARClockNode.h"
+#include "SRClockNode.h"
 #include <thread>
 #include "CommonUtils.h"
 #include "Circuits.h"
 
 using namespace cinder::audio;
 
-struct ARSequencerStep {
+struct SRSequencerStep {
 	double value;
 	int rachet;
 };
 
 
-typedef std::shared_ptr<class ARSequencerNode>	ARSequencerNodeRef;
+typedef std::shared_ptr<class SRSequencerNode>	SRSequencerNodeRef;
 
-class ARSequencerNode : public ci::audio::Node
+class SRSequencerNode : public ci::audio::Node
 {
 
 public:
 
-	ARSequencerNode(const Format &format = Format());
-	~ARSequencerNode();
+	SRSequencerNode(const Format &format = Format());
+	~SRSequencerNode();
 
 	void draw();
 

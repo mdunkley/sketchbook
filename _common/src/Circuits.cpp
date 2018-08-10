@@ -31,7 +31,8 @@ namespace Circuits {
 			std::fill(mDelayLine.begin(), mDelayLine.end(), 0);
 
 		}
-		mDelaySize = value;
+
+		mDelaySize.store(value);
 
 	}
 
@@ -49,7 +50,7 @@ namespace Circuits {
 
 			mWriteHead = wrap( mWriteHead, 0, delayLineSize-1 );
 			mDelayLine[ mWriteHead ] = invalue;
-			mReadHead = wrap( mWriteHead - std::min( mDelaySize, delayLineSize - 1), 0, delayLineSize - 1);
+			mReadHead = wrap( mWriteHead - std::min( mDelaySize.load(), delayLineSize - 1), 0, delayLineSize - 1);
 			mWriteHead++;
 
 			return mDelayLine.at( mReadHead );

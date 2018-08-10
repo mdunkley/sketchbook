@@ -59,7 +59,7 @@ class PlayerApp : public App {
 	EnvelopeFollowerNodeRef mEnvFolNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
-	SRClockNodeRef mMasterClock;
+	ARClockNodeRef mMasterClock;
 	SRSequencerNodeRef mPitchSeq;
 	
 
@@ -92,7 +92,7 @@ void PlayerApp::setup()
 	mEnvFolNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
 
-	mMasterClock = ctx->makeNode(new SRClockNode());
+	mMasterClock = ctx->makeNode(new ARClockNode());
 	mSeq = ctx->makeNode(new SRSequencerNode());
 	mPitchSeq = ctx->makeNode(new SRSequencerNode());
 
@@ -117,7 +117,7 @@ void PlayerApp::setup()
 	
 	mLfo = ctx->makeNode( new ci::audio::GenPhasorNode() );
 	mLfo->setFreq( -20 );
-	//mPlayer->getRateParam()->svketProcessor(mLfo);
+	mPlayer->getRateParam()->setProcessor(mLfo);
 	mLfo->enable();
 
 	std::list<int> scale = { 0,5 };
@@ -128,7 +128,7 @@ void PlayerApp::setup()
 	mLfo >> mAverageMonitor;
 	std::vector<float> sequence = { 1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0 };
 	mSeq->setSequence(sequence);
-	std::vector<float> pitchseq = { .1f,0.0f,.36f,.8f,.5f,.7f,.9f,.84f,.6f };
+	std::vector<float> pitchseq = { .1f,0.0f,.36f,.8f,.5f,.7f };
 	mPitchSeq->setSequence(pitchseq);
 
 	mMasterClock >> mPitchSeq;
@@ -345,6 +345,9 @@ bool PlayerApp::inspector()
 		if (ui::DragFloat("LFO Freq", &speed, .001, -10, 10)) {
 			mLfo->setFreq(speed);
 		}
+
+		
+
 	}
 	return 1;
 }

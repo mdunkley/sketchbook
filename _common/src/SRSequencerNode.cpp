@@ -1,5 +1,5 @@
 #include <cmath>
-#include "ARSequencerNode.h"
+#include "SRSequencerNode.h"
 #include "cinder/CinderMath.h"
 #include "cinder/Log.h"
 #include "cinder/Rand.h"
@@ -11,7 +11,7 @@
 
 using namespace cinder::log;
 
-ARSequencerNode::ARSequencerNode(const Format & format) :
+SRSequencerNode::SRSequencerNode(const Format & format) :
 	Node(format),
 	mPosition(this),
 	mSigDelay()
@@ -23,32 +23,32 @@ ARSequencerNode::ARSequencerNode(const Format & format) :
 	mSigDelay->setDelaySize(10);
 }
 
-ARSequencerNode::~ARSequencerNode()
+SRSequencerNode::~SRSequencerNode()
 {
 }
 
-void ARSequencerNode::draw()
+void SRSequencerNode::draw()
 {
 }
 
-void ARSequencerNode::setSequence(std::vector<float> values)
+void SRSequencerNode::setSequence(std::vector<float> values)
 {
 	int size = std::min(values.size(), (size_t)256);
 	for (int i=0; i < size; i++) { mSequence[i] = values.at(i); }
 	mLength = size;
 }
 
-void ARSequencerNode::initialize()
+void SRSequencerNode::initialize()
 {
 
 }
 
-void ARSequencerNode::setDelaySize(size_t delaysize) {
+void SRSequencerNode::setDelaySize(size_t delaysize) {
 	mSigDelay->setDelaySize(delaysize);
 	mDelaySize = delaysize;
 }
 
-void ARSequencerNode::getNextStep() {
+void SRSequencerNode::getNextStep() {
 
 	bool r = ci::Rand::randBool();
 
@@ -84,7 +84,7 @@ void ARSequencerNode::getNextStep() {
 	}
 }
 
-void ARSequencerNode::process(ci::audio::Buffer * buffer)
+void SRSequencerNode::process(ci::audio::Buffer * buffer)
 {
 	const int numChannels = buffer->getNumChannels();
 	const auto &frameRange = getProcessFramesRange();

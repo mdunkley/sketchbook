@@ -214,10 +214,10 @@
     <ClInclude Include="..\..\..\_common\include\Circuits.h">
       <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\_common\include\SRSequencerNode.h">
+    <ClInclude Include="..\..\..\_common\include\SRClockNode.h">
       <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\_common\include\SRClockNode.h">
+    <ClInclude Include="..\..\..\_common\include\SRSequencerNode.h">
       <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>

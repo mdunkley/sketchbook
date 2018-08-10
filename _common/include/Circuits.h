@@ -44,8 +44,8 @@ namespace Circuits {
 		
 		//float *arr;
 		std::vector<float> mDelayLine;
-		size_t mDelaySize = 48000;
-		size_t mDelayMax = 48000;
+		std::atomic<size_t> mDelaySize = 48000;
+		std::atomic<size_t> mDelayMax = 48000;
 		long mReadHead = 0;
 		long mWriteHead = 0;
 
