@@ -52,15 +52,20 @@ class PlayerApp : public App {
 	SRSequencerNodeRef mSeq;
 
 	AudioRecorderRef mRecorder;
+
+
 	ci::audio::InputDeviceNodeRef mInputDeviceNode;
 	ci::audio::MonitorNodeRef	mInputMonitor;
 	ci::audio::ChannelRouterNodeRef mChannelRouter;
 	ci::audio::ChannelRouterNodeRef mRecRouter;
+
+	ci::audio::ChannelRouterNodeRef mTriggerInputNode;
 	EnvelopeFollowerNodeRef mEnvFolNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
 	SRClockNodeRef mMasterClock;
 	SRSequencerNodeRef mPitchSeq;
+	ComparatorNodeRef mTrigComparator;
 	
 
 	Receiver mReceiver;
@@ -91,19 +96,23 @@ void PlayerApp::setup()
 	mEnvFolNode = ctx->makeNode(new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
 	mEnvFolNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
-
 	mMasterClock = ctx->makeNode(new SRClockNode());
 	mSeq = ctx->makeNode(new SRSequencerNode());
 	mPitchSeq = ctx->makeNode(new SRSequencerNode());
+	mTrigComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(1)));
+	mTrigComparator->setThreshold(.15);
 
-	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
+	int numInputChannels = mInputDeviceNode->getNumChannels();
+	if (mInputDeviceNode && numInputChannels > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;
 		mInputDeviceNode >> mInputMonitor;
 		mInputDeviceNode->enable();
+
 	}
 
 
-	ci::app::console() << app::getAppPath() << std::endl;
+
+	//ci::app::console() << app::getAppPath() << std::endl;
 	fs::path commonAudioPath = fs::canonical(app::getAppPath() / "../../../../../../Media/audio");
 	if( fs::exists( commonAudioPath ) ) app::addAssetDirectory( commonAudioPath );
 	mRootBank = make_shared<SampleBank>();
@@ -125,26 +134,43 @@ void PlayerApp::setup()
 	mPlayer->enable();
 	mPlayer->setVolume(1);
 
-	mLfo >> mAverageMonitor;
+
 	std::vector<float> sequence = { 1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,1,0,0,1,0 };
 	mSeq->setSequence(sequence);
 	std::vector<float> pitchseq = { .1f,0.0f,.36f,.8f,.5f,.7f,.9f,.84f,.6f };
 	mPitchSeq->setSequence(pitchseq);
 
 	mMasterClock >> mPitchSeq;
-	mPitchSeq->setClockDivision(3);
+	mPitchSeq->setClockDivision(1);
 	mMasterClock->enable();
-	mMasterClock->setRate(0.21);
+	mMasterClock->setRate(0.15);
 	mMasterClock >> mSeq;
 
-	mSeq->setDelaySize(.001*ctx->getSampleRate());
+	mTriggerInputNode = ctx->makeNode(new ci::audio::ChannelRouterNode(ci::audio::Node::Format().channels(1)));
+	if (numInputChannels > 2) {
 
-	mPlayer->getTriggerParam()->setProcessor(mSeq);
+		mInputDeviceNode >> mTrigComparator >> mTriggerInputNode->route(0,0);
+		mPlayer->getTriggerParam()->setProcessor(mTriggerInputNode);
+		mTriggerInputNode >> mAverageMonitor;
+
+	}
+	else {
+
+		mPlayer->getTriggerParam()->setProcessor(mSeq);
+		mSeq >> mAverageMonitor;
+	}
+
+	//mPlayer->getTriggerParam()->setProcessor(mSeq);
+	//mTriggerInputNode >> mAverageMonitor;
+
+	//mTriggerInputNode->enable();
+	mTriggerInputNode->enable();
+
+
 	mPlayer->getPositionParam()->setProcessor(mPitchSeq);
 	mAverageMonitor->enable();
 	mRecorder->attachTo( mPlayer );
 	mRecorder->record( false );
-
 
 	ctx->enable();
 
@@ -357,22 +383,27 @@ void PlayerApp::draw()
 		mEnvFolNode->getNumChannels() > 0 &&
 		mAverageMonitor &&
 		mAverageMonitor->getNumConnectedInputs()) {
+
 		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 100);
 		drawAudioBuffer(mAverageMonitor->getBuffer(), scopeRect, true);
 		//ci::app::console() << mAverageMonitor->getBuffer()[0] << std::endl;
+
 	}
 	
 	/*
+
 	// Draw the Scope's recorded Buffer in the upper right.
 	if (mInputDeviceNode && 
 		mInputDeviceNode->getNumChannels() > 0 && 
 		mInputMonitor && 
 		mInputMonitor->getNumConnectedInputs()) {
+
 		Rectf scopeRect(getWindowWidth() - 610, 10, getWindowWidth() - 10, 510);
 		drawAudioBuffer(mInputMonitor->getBuffer(), scopeRect, true);
+
 	}
 	*/
-	
+		
 
 
 }

@@ -89,8 +89,6 @@ private:
 	
 	int mCurrentPattern = 0;
 
-
-
 	ci::audio::GainNodeRef	mVolumeRef;
 	ci::audio::FilterLowPassNodeRef mLowPassRef;
 	ci::audio::FilterHighPassNodeRef mHighPassRef;

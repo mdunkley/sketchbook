@@ -52,6 +52,9 @@ float SampleGrain::getEnvelope() {
 
 void SampleNode::initialize()
 {
+
+	mTriggerTest = std::make_shared<Circuits::RisingEdgeTrigger>();
+
 	// Calc envelope lookup
 	calcEnvelope(SampleEnvelopeType::constant);
 	calcPanLookup();
@@ -239,8 +242,9 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 	}
 
 	float const *triggerData = nullptr;
-	if (mTriggerInput.eval())
+	if (mTriggerInput.eval()) {
 		triggerData = mTriggerInput.getValueArray();
+	}
 
 	float const *gateData = nullptr;
 	if (mGateInput.eval())
@@ -256,18 +260,7 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 
 		mProcessReadCount = readCount;
 
-		// Audio Rate trigger setup
-		if (triggerData) {
-
-			float newValue = triggerData[readCount];
-			float offset = newValue - mOldTriggerValue;
-			if (offset < 0) mWaitingForTriggerEdge = true;
-			if (mWaitingForTriggerEdge && offset > 0) {
-				mWaitingForTriggerEdge = false;
-				tick();
-			}
-			mOldTriggerValue = newValue;
-		}
+		if (triggerData  && (*mTriggerTest)(triggerData[readCount]) ) tick();
 
 		float rateMod = 0;
 		if (mRateValues) {
@@ -275,7 +268,6 @@ void SampleNode::process(ci::audio::Buffer *buffer)
 			//CI_LOG_I(rateMod);
 		}
 			
-
 		if (gateData) {
 			int gateValue = gateData[readCount] > 0;
 			mGate = gateValue;

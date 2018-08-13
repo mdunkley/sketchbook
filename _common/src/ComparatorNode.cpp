@@ -12,6 +12,8 @@ ComparatorNode::ComparatorNode(const Format & format) :
 	Node(format),
 	mThreshold(this)
 {
+	setChannelMode(ci::audio::Node::ChannelMode::SPECIFIED);
+	setNumChannels(1);
 }
 
 ComparatorNode::~ComparatorNode()

@@ -71,7 +71,7 @@ namespace Circuits {
 
 	}
 
-	float RisingEdgeTrigger::process(float value, float gatelength) {
+	float RisingEdgeTrigger::operator()(float value, float gatelength) {
 
 		float outvalue = 0;
 

@@ -5,6 +5,7 @@
 #include "cinder/Cinder.h"
 #include "cinder/audio/Node.h"
 #include "cinder/audio/Param.h" 
+#include "Circuits.h"
 
 typedef std::shared_ptr<class SampleNode> SampleNodeRef;
 
@@ -119,6 +120,8 @@ public:
 	void	trigger();
 
 protected:
+
+	Circuits::RisingEdgeTriggerRef mTriggerTest;
 
 	void	initialize()							override;
 	void	process(ci::audio::Buffer *buffer)		override;

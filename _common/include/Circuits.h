@@ -10,16 +10,14 @@
 using namespace cinder::log;
 
 
-
-
 namespace Circuits {
 
-	typedef std::shared_ptr<class SampleAndHold> SampleAndHoldRef;
-	typedef std::shared_ptr<class Delay> DelayRef;
-	typedef std::shared_ptr<class History> HistoryRef;
-	typedef std::shared_ptr<class Delta> DeltaRef;
-	typedef std::shared_ptr<class Change> ChangeRef;
-	typedef std::shared_ptr<class RisingEdgeTrigger> RisingEdgeTriggerRef;
+	typedef std::shared_ptr<class SampleAndHold>		SampleAndHoldRef;
+	typedef std::shared_ptr<class Delay>				DelayRef;
+	typedef std::shared_ptr<class History>				HistoryRef;
+	typedef std::shared_ptr<class Delta>				DeltaRef;
+	typedef std::shared_ptr<class Change>				ChangeRef;
+	typedef std::shared_ptr<class RisingEdgeTrigger>	RisingEdgeTriggerRef;
 
 	class SampleAndHold {
 	public:
@@ -71,7 +69,7 @@ namespace Circuits {
 
 	class Change {
 	public:
-		float process(float value) {
+		float operator()(float value) {
 			float outvalue = 0;
 			if (value > mPreviousValue) outvalue = 1;
 			else if (value < mPreviousValue) outvalue = -1;
@@ -86,7 +84,7 @@ namespace Circuits {
 	public:
 
 		enum class State { wait, arm, active };
-		float process(float value, float gatelength = 0);
+		float operator()(float value, float gatelength = 0);
 
 	private:
 

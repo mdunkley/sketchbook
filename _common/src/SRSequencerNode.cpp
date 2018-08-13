@@ -100,7 +100,7 @@ void SRSequencerNode::process(ci::audio::Buffer * buffer)
 
 		size_t bufferLookup = readCount;
 		float value = bufferData[bufferLookup];
-		float trigger = mChange.process(mTrigDetect.process(value))>0;
+		float trigger = mChange(mTrigDetect(value))>0;
 		mTriggerCount += trigger;
 
 		if (mTriggerCount>=mClockDivisions) {
