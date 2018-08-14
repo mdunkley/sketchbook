@@ -19,6 +19,7 @@ namespace Circuits {
 	typedef std::shared_ptr<class Change>				ChangeRef;
 	typedef std::shared_ptr<class RisingEdgeTrigger>	RisingEdgeTriggerRef;
 	typedef std::shared_ptr<class AREnvelope>			AREnvelopeRef;
+	typedef std::shared_ptr<class AllpassFilter>		AllpassFilterRef;
 
 	class SampleAndHold {
 	public:
@@ -36,8 +37,8 @@ namespace Circuits {
 
 		void setDelaySize(size_t samples);
 		size_t getDelaySize() { return mDelaySize; }
-		float process(float invalue, size_t samples);
-		float process(float invalue);
+		float operator()(float invalue, size_t samples);
+		float operator()(float invalue);
 
 	private:
 		
@@ -118,5 +119,29 @@ namespace Circuits {
 		float mDecayLength = 1024;
 		double mInc = 0;
 
+	};
+
+	class AllpassFilter {
+
+	public:
+
+		AllpassFilter();
+		AllpassFilter(size_t samples);
+		~AllpassFilter();
+
+		void setDelaySamples(size_t samps);
+		void setMaxDelaySamples(size_t samps);
+		void setGain(float gain);
+		float operator()(float value);
+
+	protected:
+
+		float mGain = 0.0;
+		float *mDelay;
+		size_t *mPosition;
+		size_t mDelaySize;
+		size_t mMaxDelaySize;
+		size_t mSampleRate;
+		
 	};
 }

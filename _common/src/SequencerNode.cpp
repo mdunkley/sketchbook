@@ -109,9 +109,9 @@ void SequencerNode::process(ci::audio::Buffer * buffer)
 			else getNextStep();
 		}
 
-		bufferData[bufferLookup] = mSigDelay->process( mSequence[mCurrentStep] );
+		bufferData[bufferLookup] = (*mSigDelay)( mSequence[mCurrentStep] );
 		//bufferData[bufferLookup] = mSequence[mCurrentStep];
-
+		
 		readCount++;
 	}
 }

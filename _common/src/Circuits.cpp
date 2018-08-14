@@ -36,14 +36,14 @@ namespace Circuits {
 
 	}
 
-	float Delay::process(float invalue, size_t samples) {
+	float Delay::operator()(float invalue, size_t samples) {
 
 		setDelaySize(samples);
-		return process(invalue);
+		return (*this)(invalue);
 
 	}
 
-	float Delay::process(float invalue) {
+	float Delay::operator()(float invalue) {
 		size_t delayLineSize = mDelayLine.size();
 		//CI_LOG_I(invalue << " " << mReadHead << " " << mDelayLine.size() << " " << mDelaySize);
 		if (delayLineSize > 0) {
@@ -142,5 +142,35 @@ namespace Circuits {
 		mDecayLength = decay;
 		return (*this)(triggerSig);
 	}
+
+	AllpassFilter::AllpassFilter()
+	{
+	}
+
+	AllpassFilter::AllpassFilter(size_t samples)
+	{
+		setMaxDelaySamples(samples);
+	}
+
+	AllpassFilter::~AllpassFilter()
+	{
+		delete[] mDelay;
+	}
+
+	void AllpassFilter::setMaxDelaySamples(size_t samps)
+	{
+		delete[] mDelay;
+		mDelay = nullptr;
+		mMaxDelaySize = samps;
+		mDelay = new float(mMaxDelaySize);
+		for (int i = 0; i < mMaxDelaySize; i++) mDelay[i] = 0;
+		
+	}
+
+	float AllpassFilter::operator()(float value)
+	{
+		return 0.0f;
+	}
+
 }
 
