@@ -15,8 +15,8 @@
 #include "cinder/audio/ChannelRouterNode.h"
 #include "EnvelopeFollowerNode.h"
 #include "ComparatorNode.h"
-#include "SRClockNode.h"
-#include "SRSequencerNode.h"
+#include "ClockNode.h"
+#include "SequencerNode.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -49,7 +49,7 @@ class PlayerApp : public App {
 
 	ci::audio::GenPhasorNodeRef mLfo;
 	ci::audio::GainNodeRef mLfoMult;
-	SRSequencerNodeRef mSeq;
+	SequencerNodeRef mSeq;
 
 	AudioRecorderRef mRecorder;
 	ci::audio::InputDeviceNodeRef mInputDeviceNode;
@@ -59,8 +59,8 @@ class PlayerApp : public App {
 	EnvelopeFollowerNodeRef mEnvFolNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
-	ARClockNodeRef mMasterClock;
-	SRSequencerNodeRef mPitchSeq;
+	ClockNodeRef mMasterClock;
+	SequencerNodeRef mPitchSeq;
 	
 
 	Receiver mReceiver;
@@ -92,9 +92,9 @@ void PlayerApp::setup()
 	mEnvFolNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
 
-	mMasterClock = ctx->makeNode(new ARClockNode());
-	mSeq = ctx->makeNode(new SRSequencerNode());
-	mPitchSeq = ctx->makeNode(new SRSequencerNode());
+	mMasterClock = ctx->makeNode(new ClockNode());
+	mSeq = ctx->makeNode(new SequencerNode());
+	mPitchSeq = ctx->makeNode(new SequencerNode());
 
 	if (mInputDeviceNode && mInputDeviceNode->getNumChannels() > 0) {
 		ci::app::console() << "INPUT " << mInputDeviceNode->getName() << std::endl;

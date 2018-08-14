@@ -18,6 +18,7 @@ namespace Circuits {
 	typedef std::shared_ptr<class Delta>				DeltaRef;
 	typedef std::shared_ptr<class Change>				ChangeRef;
 	typedef std::shared_ptr<class RisingEdgeTrigger>	RisingEdgeTriggerRef;
+	typedef std::shared_ptr<class AREnvelope>			AREnvelopeRef;
 
 	class SampleAndHold {
 	public:

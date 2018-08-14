@@ -6,16 +6,16 @@
 
 using namespace cinder::audio;
 
-typedef std::shared_ptr<class SRClockNode>	SRClockNodeRef;
+typedef std::shared_ptr<class ClockNode>	ClockNodeRef;
 
-class SRClockNode : public ci::audio::Node
+class ClockNode : public ci::audio::Node
 {
 
 public:
 
-	SRClockNode(const Format &format = Format()) : 
+	ClockNode(const Format &format = Format()) : 
 		Node(format), mSync(this,0) {}
-	~SRClockNode();
+	~ClockNode();
 
 	enum class SyncMode{ internal, external };
 	enum class OutputMode { gate, ramp };
@@ -51,7 +51,7 @@ private:
 	OutputMode mMode = OutputMode::gate;
 	size_t mTimer = 0;
 	size_t mNextTick = 0;
-	size_t mSRClockCount = 0;
+	size_t mClockCount = 0;
 	double mTickInc = 0;
 
 	float mRate = 1.0;

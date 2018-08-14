@@ -1,5 +1,5 @@
 #include <cmath>
-#include "SRClockNode.h"
+#include "ClockNode.h"
 #include "cinder/CinderMath.h"
 #include "cinder/Log.h"
 #include "cinder/Rand.h"
@@ -9,15 +9,15 @@
 
 using namespace cinder::log;
 
-SRClockNode::~SRClockNode()
+ClockNode::~ClockNode()
 {
 }
 
-void SRClockNode::initialize()
+void ClockNode::initialize()
 {
 }
 
-void SRClockNode::tick() {
+void ClockNode::tick() {
 
 	mTimer = 0;
 
@@ -31,7 +31,7 @@ void SRClockNode::tick() {
 
 }
 
-void SRClockNode::process(ci::audio::Buffer *buffer)
+void ClockNode::process(ci::audio::Buffer *buffer)
 {
 	const int numChannels = buffer->getNumChannels();
 	const auto &frameRange = getProcessFramesRange();

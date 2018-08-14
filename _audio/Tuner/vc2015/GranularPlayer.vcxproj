@@ -106,9 +106,10 @@
     <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\src\CinderImGui.cpp" />
     <ClCompile Include="..\..\..\..\Libraries\Cinder\blocks\OSC\src\cinder\osc\Osc.cpp" />
-    <ClCompile Include="..\..\..\_common\src\ARClockNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\AudioDrawUtils.cpp" />
     <ClCompile Include="..\..\..\_common\src\AudioManager.cpp" />
+    <ClCompile Include="..\..\..\_common\src\Circuits.cpp" />
+    <ClCompile Include="..\..\..\_common\src\ClockNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\CommonUtils.cpp" />
     <ClCompile Include="..\..\..\_common\src\ComparatorNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\DistortionNode.cpp" />
@@ -129,6 +130,7 @@
     <ClCompile Include="..\..\..\_common\src\SampleVoice.cpp" />
     <ClCompile Include="..\..\..\_common\src\SequencedSample.cpp" />
     <ClCompile Include="..\..\..\_common\src\Sequencer.cpp" />
+    <ClCompile Include="..\..\..\_common\src\SequencerNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\TunerNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\WavetableVoice.cpp" />
     <ClCompile Include="..\src\Player.cpp" />
@@ -139,9 +141,10 @@
     <ClInclude Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui.h" />
     <ClInclude Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\lib\imgui\imgui_internal.h" />
     <ClInclude Include="..\..\..\..\Libraries\Cinder\blocks\OSC\src\cinder\osc\Osc.h" />
-    <ClInclude Include="..\..\..\_common\include\ARClockNode.h" />
     <ClInclude Include="..\..\..\_common\include\AudioDrawUtils.h" />
     <ClInclude Include="..\..\..\_common\include\AudioManager.hpp" />
+    <ClInclude Include="..\..\..\_common\include\Circuits.h" />
+    <ClInclude Include="..\..\..\_common\include\ClockNode.h" />
     <ClInclude Include="..\..\..\_common\include\CommonUtils.h" />
     <ClInclude Include="..\..\..\_common\include\ComparatorNode.h" />
     <ClInclude Include="..\..\..\_common\include\DistortionNode.h" />
@@ -162,6 +165,7 @@
     <ClInclude Include="..\..\..\_common\include\SampleVoice.hpp" />
     <ClInclude Include="..\..\..\_common\include\SequencedSample.h" />
     <ClInclude Include="..\..\..\_common\include\Sequencer.hpp" />
+    <ClInclude Include="..\..\..\_common\include\SequencerNode.h" />
     <ClInclude Include="..\..\..\_common\include\TunerNode.h" />
     <ClInclude Include="..\..\..\_common\include\WavetableVoice.hpp" />
     <ClInclude Include="..\include\Resources.h" />

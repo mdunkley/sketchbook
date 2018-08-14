@@ -15,8 +15,8 @@
 #include "cinder/audio/ChannelRouterNode.h"
 #include "EnvelopeFollowerNode.h"
 #include "ComparatorNode.h"
-#include "SRClockNode.h"
-#include "SRSequencerNode.h"
+#include "ClockNode.h"
+#include "SequencerNode.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -49,7 +49,7 @@ class PlayerApp : public App {
 
 	ci::audio::GenPhasorNodeRef mLfo;
 	ci::audio::GainNodeRef mLfoMult;
-	SRSequencerNodeRef mSeq;
+	SequencerNodeRef mSeq;
 
 	AudioRecorderRef mRecorder;
 
@@ -64,7 +64,7 @@ class PlayerApp : public App {
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
 	SRClockNodeRef mMasterClock;
-	SRSequencerNodeRef mPitchSeq;
+	SequencerNodeRef mPitchSeq;
 	ComparatorNodeRef mTrigComparator;
 	
 
@@ -97,8 +97,8 @@ void PlayerApp::setup()
 	mEnvFolNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
 	mMasterClock = ctx->makeNode(new SRClockNode());
-	mSeq = ctx->makeNode(new SRSequencerNode());
-	mPitchSeq = ctx->makeNode(new SRSequencerNode());
+	mSeq = ctx->makeNode(new SequencerNode());
+	mPitchSeq = ctx->makeNode(new SequencerNode());
 	mTrigComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(1)));
 	mTrigComparator->setThreshold(.15);
 
