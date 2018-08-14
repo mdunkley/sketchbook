@@ -63,7 +63,7 @@ class PlayerApp : public App {
 	EnvelopeFollowerNodeRef mEnvFolNode;
 	ci::audio::MonitorNodeRef mAverageMonitor;
 	ComparatorNodeRef mComparator;
-	SRClockNodeRef mMasterClock;
+	ClockNodeRef mMasterClock;
 	SequencerNodeRef mPitchSeq;
 	ComparatorNodeRef mTrigComparator;
 	
@@ -96,7 +96,7 @@ void PlayerApp::setup()
 	mEnvFolNode = ctx->makeNode(new EnvelopeFollowerNode(ci::audio::Node::Format().channels(2).channelMode(ci::audio::Node::ChannelMode::MATCHES_INPUT)));
 	mEnvFolNode->setMultiplier(5);
 	mComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(2)));
-	mMasterClock = ctx->makeNode(new SRClockNode());
+	mMasterClock = ctx->makeNode(new ClockNode());
 	mSeq = ctx->makeNode(new SequencerNode());
 	mPitchSeq = ctx->makeNode(new SequencerNode());
 	mTrigComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(1)));

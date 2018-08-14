@@ -109,6 +109,7 @@
     <ClCompile Include="..\..\..\_common\src\AudioDrawUtils.cpp" />
     <ClCompile Include="..\..\..\_common\src\AudioManager.cpp" />
     <ClCompile Include="..\..\..\_common\src\Circuits.cpp" />
+    <ClCompile Include="..\..\..\_common\src\ClockNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\CommonUtils.cpp" />
     <ClCompile Include="..\..\..\_common\src\ComparatorNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\DistortionNode.cpp" />
@@ -129,11 +130,10 @@
     <ClCompile Include="..\..\..\_common\src\SampleVoice.cpp" />
     <ClCompile Include="..\..\..\_common\src\SequencedSample.cpp" />
     <ClCompile Include="..\..\..\_common\src\Sequencer.cpp" />
-    <ClCompile Include="..\..\..\_common\src\SRClockNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\SequencerNode.cpp" />
+    <ClCompile Include="..\..\..\_common\src\TestNode.cpp" />
     <ClCompile Include="..\..\..\_common\src\WavetableVoice.cpp" />
     <ClCompile Include="..\src\Player.cpp" />
-    <ClCompile Include="TestNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Libraries\Cinder\blocks\Cinder-ImGui\include\CinderImGui.h" />
@@ -166,9 +166,9 @@
     <ClInclude Include="..\..\..\_common\include\Sequencer.hpp" />
     <ClInclude Include="..\..\..\_common\include\ClockNode.h" />
     <ClInclude Include="..\..\..\_common\include\SequencerNode.h" />
+    <ClInclude Include="..\..\..\_common\include\TestNode.h" />
     <ClInclude Include="..\..\..\_common\include\WavetableVoice.hpp" />
     <ClInclude Include="..\include\Resources.h" />
-    <ClInclude Include="TestNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

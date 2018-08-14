@@ -128,13 +128,13 @@
     <ClCompile Include="..\..\..\_common\src\Circuits.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\_common\src\SRClockNode.cpp">
+    <ClCompile Include="..\..\..\_common\src\SequencerNode.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="TestNode.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\..\..\_common\src\TestNode.cpp">
+      <Filter>Audio</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\_common\src\SequencerNode.cpp">
+    <ClCompile Include="..\..\..\_common\src\ClockNode.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
   </ItemGroup>
@@ -217,13 +217,13 @@
     <ClInclude Include="..\..\..\_common\include\Circuits.h">
       <Filter>Audio</Filter>
     </ClInclude>
-    <ClInclude Include="TestNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\_common\include\SequencerNode.h">
       <Filter>Audio</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\_common\include\ClockNode.h">
+      <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\_common\include\TestNode.h">
       <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>
