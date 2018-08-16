@@ -1,12 +1,13 @@
 #include "Circuits.h"
 #include <list>
 #include "cinder/CinderMath.h"
+#include "cinder/audio/audio.h"
 #include "CommonUtils.h"
 
 
 namespace Circuits {
 
-	float SampleAndHold::process(float invalue, float gatesig) {
+	float SampleAndHold::operator()(float invalue, float gatesig) {
 		if (gatesig > 0) mValue = invalue;
 		return mValue;
 	}
@@ -143,31 +144,34 @@ namespace Circuits {
 		return (*this)(triggerSig);
 	}
 
-	AllpassFilter::AllpassFilter()
-	{
+	AllPassFilter::AllPassFilter(){
+		setMaxDelaySamples( 512 );
 	}
 
-	AllpassFilter::AllpassFilter(size_t samples)
-	{
+	AllPassFilter::AllPassFilter(size_t samples){
 		setMaxDelaySamples(samples);
 	}
 
-	AllpassFilter::~AllpassFilter()
-	{
+	AllPassFilter::~AllPassFilter()	{
 		delete[] mDelay;
 	}
 
-	void AllpassFilter::setMaxDelaySamples(size_t samps)
+	void AllPassFilter::setDelaySamples(size_t samps) {
+		mDelaySize = std::min(samps, mMaxDelaySize);
+	}
+
+	void AllPassFilter::setMaxDelaySamples(size_t samps)
 	{
 		delete[] mDelay;
 		mDelay = nullptr;
 		mMaxDelaySize = samps;
 		mDelay = new float(mMaxDelaySize);
 		for (int i = 0; i < mMaxDelaySize; i++) mDelay[i] = 0;
+		mDelaySize = std::min(mDelaySize, mMaxDelaySize);
 		
 	}
 
-	float AllpassFilter::operator()(float value)
+	float AllPassFilter::operator()(float value)
 	{
 		return 0.0f;
 	}

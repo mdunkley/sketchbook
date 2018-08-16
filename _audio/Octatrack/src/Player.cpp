@@ -17,6 +17,7 @@
 #include "ComparatorNode.h"
 #include "ClockNode.h"
 #include "SequencerNode.h"
+#include "TestNode.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -66,7 +67,7 @@ class PlayerApp : public App {
 	ClockNodeRef mMasterClock;
 	SequencerNodeRef mPitchSeq;
 	ComparatorNodeRef mTrigComparator;
-	
+	TestNodeRef mTestNode;
 
 	Receiver mReceiver;
 
@@ -101,6 +102,8 @@ void PlayerApp::setup()
 	mPitchSeq = ctx->makeNode(new SequencerNode());
 	mTrigComparator = ctx->makeNode(new ComparatorNode(ci::audio::Node::Format().channels(1)));
 	mTrigComparator->setThreshold(.15);
+
+	mTestNode = ctx->makeNode(new TestNode());
 
 	int numInputChannels = mInputDeviceNode->getNumChannels();
 	if (mInputDeviceNode && numInputChannels > 0) {

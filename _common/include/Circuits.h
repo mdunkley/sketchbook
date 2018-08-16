@@ -19,11 +19,11 @@ namespace Circuits {
 	typedef std::shared_ptr<class Change>				ChangeRef;
 	typedef std::shared_ptr<class RisingEdgeTrigger>	RisingEdgeTriggerRef;
 	typedef std::shared_ptr<class AREnvelope>			AREnvelopeRef;
-	typedef std::shared_ptr<class AllpassFilter>		AllpassFilterRef;
+	typedef std::shared_ptr<class AllPassFilter>		AllPassFilterRef;
 
 	class SampleAndHold {
 	public:
-		float process(float invalue, float gatesig);
+		float operator()(float invalue, float gatesig);
 	private:
 		float mValue = 0;
 	};
@@ -121,13 +121,13 @@ namespace Circuits {
 
 	};
 
-	class AllpassFilter {
+	class AllPassFilter {
 
 	public:
 
-		AllpassFilter();
-		AllpassFilter(size_t samples);
-		~AllpassFilter();
+		AllPassFilter();
+		AllPassFilter(size_t samples);
+		~AllPassFilter();
 
 		void setDelaySamples(size_t samps);
 		void setMaxDelaySamples(size_t samps);
